@@ -1,0 +1,1 @@
+web: ./build/install/yegor.cheprasov.x-travel-backend/bin/yegor.cheprasov.x-travel-backend
