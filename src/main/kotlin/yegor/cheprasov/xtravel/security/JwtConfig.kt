@@ -18,6 +18,8 @@ class JwtConfig(private val environment: ApplicationEnvironment) {
     private val myRealm = environment.config.property("jwt.realm").getString()
     private val algorithm = Algorithm.HMAC256(secret)
 
+    val realm = myRealm
+
     val verifier: JWTVerifier = JWT
         .require(algorithm)
         .withIssuer(issuer)

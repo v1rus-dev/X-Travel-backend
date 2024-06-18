@@ -5,13 +5,14 @@ import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
+import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.Users.createdAt
 import yegor.cheprasov.xtravel.data.repositories.user.Users.updatedAt
 
-class UserRepositoryImpl(private val database: Database) : UserRepository {
+class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserRepository {
     override suspend fun insert(userDTO: UserDTO) {
-        transaction(database) {
+        databaseProvider.dbQuery {
             Users.insert {
                 it[userId] = userDTO.userId
                 it[login] = userDTO.login
@@ -25,7 +26,7 @@ class UserRepositoryImpl(private val database: Database) : UserRepository {
 
     override suspend fun fetchUser(login: String): UserDTO? {
         return try {
-            val userModel = transaction(database) { Users.select { Users.login.eq(login) }.single() }
+            val userModel = databaseProvider.dbQuery { Users.select { Users.login.eq(login) }.single() }
             UserDTO(
                 userId = userModel[Users.userId],
                 login = userModel[Users.login],
