@@ -4,43 +4,38 @@ import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
 import io.ktor.server.response.*
-import yegor.cheprasov.xtravel.data.database.tokens.TokenDTO
-import yegor.cheprasov.xtravel.data.database.tokens.Tokens
+import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 import yegor.cheprasov.xtravel.data.database.users.UserDTO
-import yegor.cheprasov.xtravel.data.database.users.Users
-import java.util.UUID
+import yegor.cheprasov.xtravel.data.repositories.user.UserRepository
+import yegor.cheprasov.xtravel.security.JwtConfig
+import java.util.*
 
 class RegisterController(
     private val call: ApplicationCall
-) {
+) : KoinComponent {
+
+    private val jwtConfig: JwtConfig by inject()
+    private val userRepository: UserRepository by inject()
 
     suspend fun registerNewUser() {
         val registerReceiveRemote = call.receive(RegisterReceiveRemote::class)
-        val userDTO = Users.fetchUser(registerReceiveRemote.login)
+        val userDTO = userRepository.fetchUser(registerReceiveRemote.login)
 
         if (userDTO != null) {
             call.respond(HttpStatusCode.Conflict, "User already exists")
         } else {
-            val token = UUID.randomUUID().toString()
-
-            Users.insert(
-                UserDTO(
-                    login = registerReceiveRemote.login,
-                    password = registerReceiveRemote.password,
-                    firstName = registerReceiveRemote.firstName,
-                    lastName = registerReceiveRemote.lastName,
-                    email = registerReceiveRemote.email
-                )
+            val user = UserDTO(
+                userId = UUID.randomUUID(),
+                login = registerReceiveRemote.login,
+                passwordHash = registerReceiveRemote.password,
+                email = registerReceiveRemote.email,
+                createdAt = System.currentTimeMillis(),
+                updatedAt = System.currentTimeMillis()
             )
 
-            Tokens.insert(
-                TokenDTO(
-                    id = UUID.randomUUID().toString(),
-                    login = registerReceiveRemote.login,
-                    token = token
-                )
-            )
-
+            userRepository.insert(user)
+            val token = jwtConfig.makeToken(user.login)
             call.respond(RegisterResponseRemote(token = token))
         }
     }

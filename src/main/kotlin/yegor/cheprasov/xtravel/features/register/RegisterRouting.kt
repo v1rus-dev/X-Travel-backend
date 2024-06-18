@@ -8,10 +8,8 @@ fun Application.configureRegisterRouting() {
 
     routing {
         post("/register") {
-
-            call.respond("Successfully register")
-//            val registerController = RegisterController(call)
-//            registerController.registerNewUser()
+            val registerController = RegisterController(call)
+            registerController.registerNewUser()
         }
     }
 

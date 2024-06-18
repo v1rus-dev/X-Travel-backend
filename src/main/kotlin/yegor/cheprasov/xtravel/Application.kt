@@ -1,25 +1,30 @@
 package yegor.cheprasov.xtravel
 
 import io.ktor.server.application.*
+import org.koin.ktor.plugin.Koin
 import yegor.cheprasov.xtravel.data.database.configureDatabase
-import yegor.cheprasov.xtravel.features.login.configureLoginRouting
-import yegor.cheprasov.xtravel.features.register.configureRegisterRouting
-import yegor.cheprasov.xtravel.plugins.*
+import yegor.cheprasov.xtravel.di.databaseModule
+import yegor.cheprasov.xtravel.di.environmentModule
+import yegor.cheprasov.xtravel.di.jwtConfigModule
 
 fun main(args: Array<String>) {
     io.ktor.server.netty.EngineMain.main(args)
 }
 
-fun Application.module() {
-    configureDatabase()
-    configureHTTP()
-    configureSecurity()
-    configureAdministration()
-    configureSerialization()
-    configureDatabases()
-    configureMonitoring()
-    configureRouting()
+fun Application.initialize() {
 
-    configureRegisterRouting()
-    configureLoginRouting()
+    val database = configureDatabase()
+
+    install(Koin) {
+        modules(
+            environmentModule(environment),
+            databaseModule(database),
+            jwtConfigModule
+        )
+    }
+    main()
+}
+
+fun Application.main() {
+    module()
 }
