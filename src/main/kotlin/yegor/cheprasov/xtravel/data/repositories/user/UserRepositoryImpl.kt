@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.transaction
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
-import yegor.cheprasov.xtravel.data.database.users.UserDTO
+import yegor.cheprasov.xtravel.data.database.entities.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.Users.createdAt
 import yegor.cheprasov.xtravel.data.repositories.user.Users.updatedAt
 

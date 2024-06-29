@@ -102,6 +102,13 @@ fun Application.configureJWT() {
 
     authentication {
         jwt("auth-jwt") {
+            validate { jwtCredential ->
+                if (jwtCredential.payload.getClaim("username").asString() != "") {
+                    JWTPrincipal(jwtCredential.payload)
+                } else {
+                    null
+                }
+            }
             realm = jwtConfig.realm
             verifier(jwtConfig.verifier)
 

@@ -13,12 +13,10 @@ class CountryController(
     private val countryRepository: CountryRepository by inject()
 
     suspend fun getCountries() {
-        val countries = countryRepository.fetchCountries()
+        val countries = countryRepository.fetchTrendingCountry()
 
         val response = CountryResponseRemote(
-            countries = countries.map {
-                Country(name = it.name)
-            }
+            countries = countries.map { ShortCountry.fromDTO(it) }
         )
 
         call.respond(response)

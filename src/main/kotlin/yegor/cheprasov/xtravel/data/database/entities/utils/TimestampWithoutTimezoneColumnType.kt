@@ -1,4 +1,4 @@
-package yegor.cheprasov.xtravel.data.database.utils
+package yegor.cheprasov.xtravel.data.database.entities.utils
 
 import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType

@@ -6,7 +6,7 @@ import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import yegor.cheprasov.xtravel.data.database.users.UserDTO
+import yegor.cheprasov.xtravel.data.database.entities.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.UserRepository
 import yegor.cheprasov.xtravel.security.JwtConfig
 import java.util.*

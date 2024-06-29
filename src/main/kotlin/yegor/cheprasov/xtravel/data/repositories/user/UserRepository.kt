@@ -1,6 +1,6 @@
 package yegor.cheprasov.xtravel.data.repositories.user
 
-import yegor.cheprasov.xtravel.data.database.users.UserDTO
+import yegor.cheprasov.xtravel.data.database.entities.users.UserDTO
 
 interface UserRepository {
     suspend fun insert(userDTO: UserDTO)

@@ -1,4 +1,4 @@
-package yegor.cheprasov.xtravel.data.database.usersProfiles
+package yegor.cheprasov.xtravel.data.database.entities.usersProfiles
 
 import java.util.UUID
 
