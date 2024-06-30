@@ -7,7 +7,7 @@ data class CountryDTO(
     val countryNameRu: String,
     val countryDescriptionEn: String,
     val countryDescriptionRu: String,
-    val flagUrl: String,
+    val flagUrl: String? = null,
     val capitalId: String,
     val population: Int,
     val mainFolderName: String

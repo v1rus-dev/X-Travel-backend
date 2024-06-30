@@ -8,6 +8,6 @@ interface CityRepository {
 
     suspend fun getAll(): List<CityDTO>
 
-    suspend fun getById(id: Long): CityDTO?
+    suspend fun getById(id: String): CityDTO?
 
 }

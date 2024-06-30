@@ -5,7 +5,7 @@ data class ShortCountryDTO(
     val mainPhotoUrl: String? = null,
     val countryNameEn: String,
     val countryNameRu: String,
-    val flagUrl: String,
+    val flagUrl: String? = null,
     val capitalId: String,
     val capitalNameEn: String,
     val capitalNameRu: String,

@@ -108,7 +108,7 @@ object Countries : IntIdTable() {
     val countryNameRu = varchar("country_name_ru", 60)
     val countryDescriptionEn = text("country_description_en")
     val countryDescriptionRu = text("country_description_ru")
-    val flagUrl = text("flag_url")
+    val flagUrl = text("flag_url").nullable()
     val capitalId = varchar("capital_id", 50)
     val population = integer("population")
     val mainFolderName = varchar("main_folder_name", 30)

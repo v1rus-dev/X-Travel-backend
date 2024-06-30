@@ -2,6 +2,6 @@ package yegor.cheprasov.xtravel.utils
 
 object BuildConfig {
 
-    val useMockInformation: Boolean = true
+    val useMockInformation: Boolean = false
 
 }

@@ -22,7 +22,7 @@ class CountryRepositoryMock : CountryRepository {
         )
 }
 
-private object CountriesMockFactory {
+object CountriesMockFactory {
 
     fun getCountry(countryMock: CountryMock): CountryDTO =
         CountryDTO(
@@ -55,7 +55,7 @@ private object CountriesMockFactory {
         val countryNameRu: String,
         val countryDescriptionEn: String,
         val countryDescriptionRu: String,
-        val flagUrl: String,
+        val flagUrl: String?,
         val capitalId: String,
         val population: Int,
         val mainFolderName: String

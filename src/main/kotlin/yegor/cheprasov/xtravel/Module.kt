@@ -1,6 +1,7 @@
 package yegor.cheprasov.xtravel
 
 import io.ktor.server.application.*
+import yegor.cheprasov.xtravel.features.city.configureCityRouting
 import yegor.cheprasov.xtravel.features.country.configureCountryRouting
 import yegor.cheprasov.xtravel.features.favorites.configureFavoriteRouting
 import yegor.cheprasov.xtravel.features.login.configureLoginRouting
@@ -23,4 +24,5 @@ fun Application.module() {
     configureLoginRouting()
     configureCountryRouting()
     configureFavoriteRouting()
+    configureCityRouting()
 }
