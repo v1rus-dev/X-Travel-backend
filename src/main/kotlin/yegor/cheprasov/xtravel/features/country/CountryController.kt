@@ -5,6 +5,7 @@ import io.ktor.server.response.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import yegor.cheprasov.xtravel.data.repositories.country.CountryRepository
+import yegor.cheprasov.xtravel.mappers.CountryMapper
 
 class CountryController(
     private val call: ApplicationCall
@@ -16,7 +17,7 @@ class CountryController(
         val countries = countryRepository.fetchTrendingCountry()
 
         val response = CountryResponseRemote(
-            countries = countries.map { ShortCountry.fromDTO(it) }
+            countries = countries.map { CountryMapper.mapShortDTOtoNetwork(it) }
         )
 
         call.respond(response)

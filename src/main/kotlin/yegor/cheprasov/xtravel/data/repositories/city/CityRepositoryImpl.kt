@@ -78,4 +78,5 @@ object City : IdTable<String>("cities") {
     val latitude = double("latitude")
     val longitude = double("longitude")
     val imagesUrls = stringList("images_urls")
+    val countryId = integer("country_id")
 }

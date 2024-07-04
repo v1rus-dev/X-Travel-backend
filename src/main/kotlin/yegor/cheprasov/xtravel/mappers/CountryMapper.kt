@@ -1,16 +1,29 @@
 package yegor.cheprasov.xtravel.mappers
 
 import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.entities.CountryRemoteResponseShortEntity
 import yegor.cheprasov.xtravel.features.country.ShortCountry
 
 object CountryMapper {
     fun mapShortDTOtoNetwork(shortCountryDTO: ShortCountryDTO): ShortCountry =
         ShortCountry(
             countryId = shortCountryDTO.countryId,
-            mainPhotoUrl = shortCountryDTO.mainPhotoUrl ?: getMainPhotoURL(shortCountryDTO.mainFolderName),
+            mainPhotoUrl = getMainPhotoURL(shortCountryDTO.mainFolderName),
             countryNameEn = shortCountryDTO.countryNameEn,
             countryNameRu = shortCountryDTO.countryNameRu,
-            flagUrl = shortCountryDTO.flagUrl,
+            flagUrl = shortCountryDTO.flagUrl ?: getFlagUrl(shortCountryDTO.mainFolderName),
+            capitalId = shortCountryDTO.capitalId,
+            capitalNameEn = shortCountryDTO.capitalNameEn,
+            capitalNameRu = shortCountryDTO.capitalNameRu
+        )
+
+    fun mapShortDTOtoNetworkMain(shortCountryDTO: ShortCountryDTO): CountryRemoteResponseShortEntity =
+        CountryRemoteResponseShortEntity(
+            countryId = shortCountryDTO.countryId,
+            mainPhotoUrl = getMainPhotoURL(shortCountryDTO.mainFolderName),
+            countryNameEn = shortCountryDTO.countryNameEn,
+            countryNameRu = shortCountryDTO.countryNameRu,
+            flagUrl = shortCountryDTO.flagUrl ?: getFlagUrl(shortCountryDTO.mainFolderName),
             capitalId = shortCountryDTO.capitalId,
             capitalNameEn = shortCountryDTO.capitalNameEn,
             capitalNameRu = shortCountryDTO.capitalNameRu
@@ -18,4 +31,7 @@ object CountryMapper {
 
     private fun getMainPhotoURL(mainFolderName: String): String =
         "files/counties/$mainFolderName/main.jpg"
+
+    private fun getFlagUrl(mainFolderName: String): String =
+        "files/countries/$mainFolderName/images/flag.jpg"
 }

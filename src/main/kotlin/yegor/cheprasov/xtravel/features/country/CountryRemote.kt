@@ -18,18 +18,4 @@ data class ShortCountry(
     val capitalId: String,
     val capitalNameEn: String,
     val capitalNameRu: String,
-) {
-    companion object {
-        fun fromDTO(countryDTO: ShortCountryDTO): ShortCountry =
-            ShortCountry(
-                countryId = countryDTO.countryId,
-                mainPhotoUrl = countryDTO.mainPhotoUrl,
-                countryNameEn = countryDTO.countryNameEn,
-                countryNameRu = countryDTO.countryNameRu,
-                flagUrl = countryDTO.flagUrl,
-                capitalId = countryDTO.capitalId,
-                capitalNameEn = countryDTO.capitalNameEn,
-                capitalNameRu = countryDTO.capitalNameRu
-            )
-    }
-}
+)

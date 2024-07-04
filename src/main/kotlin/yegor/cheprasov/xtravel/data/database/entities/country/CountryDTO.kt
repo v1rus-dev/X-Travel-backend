@@ -2,7 +2,6 @@ package yegor.cheprasov.xtravel.data.database.entities.country
 
 data class CountryDTO(
     val countryId: Int,
-    val mainPhotoUrl: String? = null,
     val countryNameEn: String,
     val countryNameRu: String,
     val countryDescriptionEn: String,
