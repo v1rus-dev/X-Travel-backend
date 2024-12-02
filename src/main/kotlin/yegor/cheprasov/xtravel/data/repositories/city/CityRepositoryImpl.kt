@@ -5,7 +5,6 @@ import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
-import yegor.cheprasov.xtravel.data.utils.stringList
 
 class CityRepositoryImpl(
     private val databaseProvider: DatabaseProvider
@@ -20,7 +19,7 @@ class CityRepositoryImpl(
                 it[population] = cityDTO.population
                 it[latitude] = cityDTO.latitude
                 it[longitude] = cityDTO.longitude
-                it[imagesUrls] = cityDTO.imagesUrls
+                it[countryId] = cityDTO.countryId
             }
         }
     }
@@ -59,10 +58,10 @@ class CityRepositoryImpl(
             nameRu = this[City.nameRu],
             descriptionEn = this[City.descriptionEn],
             descriptionRu = this[City.descriptionRu],
-            imagesUrls = this[City.imagesUrls],
             population = this[City.population],
             latitude = this[City.latitude],
-            longitude = this[City.longitude]
+            longitude = this[City.longitude],
+            countryId = this[City.countryId]
         )
 
 }
@@ -77,6 +76,5 @@ object City : IdTable<String>("cities") {
     val population = integer("population")
     val latitude = double("latitude")
     val longitude = double("longitude")
-    val imagesUrls = stringList("images_urls")
-    val countryId = integer("country_id")
+    val countryId = long("country_id")
 }

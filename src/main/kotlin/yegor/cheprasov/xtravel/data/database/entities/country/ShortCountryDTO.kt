@@ -1,7 +1,7 @@
 package yegor.cheprasov.xtravel.data.database.entities.country
 
 data class ShortCountryDTO(
-    val countryId: Int,
+    val countryId: Long,
     val countryNameEn: String,
     val countryNameRu: String,
     val flagUrl: String? = null,

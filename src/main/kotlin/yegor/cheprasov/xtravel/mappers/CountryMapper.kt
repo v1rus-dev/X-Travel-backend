@@ -30,8 +30,8 @@ object CountryMapper {
         )
 
     private fun getMainPhotoURL(mainFolderName: String): String =
-        "files/counties/$mainFolderName/main.jpg"
+        "resources/countries/$mainFolderName/images/main.jpg"
 
     private fun getFlagUrl(mainFolderName: String): String =
-        "files/countries/$mainFolderName/images/flag.jpg"
+        "resources/countries/$mainFolderName/images/flag.jpg"
 }

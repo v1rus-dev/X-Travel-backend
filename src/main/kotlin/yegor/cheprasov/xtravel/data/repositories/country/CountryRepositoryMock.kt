@@ -31,7 +31,6 @@ object CountriesMockFactory {
             countryNameRu = countryMock.countryNameRu,
             countryDescriptionEn = countryMock.countryDescriptionEn,
             countryDescriptionRu = countryMock.countryDescriptionRu,
-            flagUrl = countryMock.flagUrl,
             capitalId = countryMock.capitalId,
             population = countryMock.population,
             mainFolderName = countryMock.mainFolderName
@@ -50,12 +49,12 @@ object CountriesMockFactory {
         )
 
     enum class CountryMock(
-        val countryId: Int,
+        val countryId: Long,
         val countryNameEn: String,
         val countryNameRu: String,
         val countryDescriptionEn: String,
         val countryDescriptionRu: String,
-        val flagUrl: String?,
+        var flagUrl: String?,
         val capitalId: String,
         val population: Int,
         val mainFolderName: String

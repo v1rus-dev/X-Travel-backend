@@ -6,7 +6,7 @@ data class CityDTO(
     val nameRu: String,
     val descriptionEn: String,
     val descriptionRu: String,
-    val imagesUrls: List<String>,
+    val countryId: Long,
     val population: Int,
     val latitude: Double,
     val longitude: Double,

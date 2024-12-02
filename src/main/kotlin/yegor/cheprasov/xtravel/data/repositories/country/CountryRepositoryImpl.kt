@@ -9,7 +9,6 @@ import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.data.repositories.city.City
 import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameEn
 import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameRu
-import yegor.cheprasov.xtravel.data.repositories.country.Countries.flagUrl
 
 class CountryRepositoryImpl(
     private val databaseProvider: DatabaseProvider
@@ -22,7 +21,6 @@ class CountryRepositoryImpl(
                 it[countryNameRu] = countryDTO.countryNameRu
                 it[countryDescriptionEn] = countryDTO.countryDescriptionEn
                 it[countryDescriptionRu] = countryDTO.countryDescriptionRu
-                it[flagUrl] = countryDTO.flagUrl
                 it[capitalId] = countryDTO.capitalId
                 it[population] = countryDTO.population
             }
@@ -57,7 +55,6 @@ class CountryRepositoryImpl(
                     Countries.id,
                     countryNameEn,
                     countryNameRu,
-                    flagUrl,
                     City.id,
                     City.nameEn,
                     City.nameRu,
@@ -70,7 +67,6 @@ class CountryRepositoryImpl(
                             countryId = it[Countries.id].value,
                             countryNameEn = it[countryNameEn],
                             countryNameRu = it[countryNameRu],
-                            flagUrl = it[flagUrl],
                             capitalId = it[City.id].value,
                             capitalNameEn = it[City.nameEn],
                             capitalNameRu = it[City.nameRu],
@@ -96,22 +92,20 @@ class CountryRepositoryImpl(
             countryNameRu = this[countryNameRu],
             countryDescriptionEn = this[Countries.countryDescriptionEn],
             countryDescriptionRu = this[Countries.countryDescriptionRu],
-            flagUrl = this[flagUrl],
             capitalId = this[Countries.capitalId],
             population = this[Countries.population],
             mainFolderName = this[Countries.mainFolderName]
         )
 }
 
-object Countries : IdTable<Int>() {
-    override val id: Column<EntityID<Int>> = integer("id").entityId()
+object Countries : IdTable<Long>() {
+    override val id: Column<EntityID<Long>> = long("country_id").entityId()
 
     val countryNameEn = varchar("country_name_en", 60)
     val countryNameRu = varchar("country_name_ru", 60)
     val countryDescriptionEn = text("country_description_en")
     val countryDescriptionRu = text("country_description_ru")
-    val flagUrl = text("flag_url").nullable()
-    val capitalId = varchar("capital_id", 50)
+    val capitalId = varchar("capital_id", 60)
     val population = integer("population")
     val mainFolderName = varchar("main_folder_name", 30)
 }

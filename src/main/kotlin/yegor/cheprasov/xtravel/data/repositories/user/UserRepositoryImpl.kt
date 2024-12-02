@@ -1,6 +1,9 @@
 package yegor.cheprasov.xtravel.data.repositories.user
 
+import org.jetbrains.exposed.dao.id.EntityID
+import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.dao.id.IntIdTable
+import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -9,12 +12,13 @@ import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.entities.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.Users.createdAt
 import yegor.cheprasov.xtravel.data.repositories.user.Users.updatedAt
+import java.util.UUID
 
 class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserRepository {
     override suspend fun insert(userDTO: UserDTO) {
         databaseProvider.dbQuery {
             Users.insert {
-                it[userId] = userDTO.userId
+                it[id] = userDTO.userId
                 it[login] = userDTO.login
                 it[password_hash] = userDTO.passwordHash
                 it[email] = userDTO.email
@@ -28,7 +32,7 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
         return try {
             val userModel = databaseProvider.dbQuery { Users.select { Users.login.eq(login) }.single() }
             UserDTO(
-                userId = userModel[Users.userId],
+                userId = userModel[Users.id].value,
                 login = userModel[Users.login],
                 passwordHash = userModel[Users.password_hash],
                 email = userModel[Users.email],
@@ -41,8 +45,9 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
     }
 }
 
-object Users : IntIdTable() {
-    val userId = uuid("user_id")
+object Users : IdTable<UUID>() {
+    override val id: Column<EntityID<UUID>> = uuid("user_id").entityId()
+
     val login = varchar("login", length = 25)
     val password_hash = varchar("password_hash", length = 255)
     val email = varchar("email", length = 25)

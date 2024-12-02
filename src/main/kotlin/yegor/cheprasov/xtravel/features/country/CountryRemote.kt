@@ -10,7 +10,7 @@ data class CountryResponseRemote(
 
 @Serializable
 data class ShortCountry(
-    val countryId: Int,
+    val countryId: Long,
     val mainPhotoUrl: String?,
     val countryNameEn: String,
     val countryNameRu: String,

@@ -20,7 +20,7 @@ class CityController(
                 nameRu = it.nameRu,
                 descriptionEn = it.descriptionEn,
                 descriptionRu = it.descriptionRu,
-                imagesUrls = it.imagesUrls,
+                imagesUrls = emptyList(),
                 population = it.population,
                 latitude = it.latitude,
                 longitude = it.longitude

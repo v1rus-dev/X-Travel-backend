@@ -14,10 +14,4 @@ fun Application.configureCountryRouting() {
         }
     }
 
-    routing {
-        get("/staticResources/{imageName}") {
-            call.respondFile(File("./files/japan/${call.parameters["imageName"]}"))
-        }
-    }
-
 }

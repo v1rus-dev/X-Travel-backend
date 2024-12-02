@@ -7,7 +7,7 @@ val exposed_version: String by project
 
 plugins {
     kotlin("jvm") version "2.0.0"
-    id("io.ktor.plugin") version "2.3.11"
+    id("io.ktor.plugin") version "3.0.0"
     id("org.jetbrains.kotlin.plugin.serialization") version "2.0.0"
 }
 
@@ -48,7 +48,6 @@ dependencies {
 
     implementation("io.insert-koin:koin-ktor:3.5.6")
 
-    testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }
 

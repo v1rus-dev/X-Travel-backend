@@ -1,30 +1,32 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
 import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
+import yegor.cheprasov.xtravel.data.repositories.country.CountriesMockFactory
 
 class CityRepositoryMock : CityRepository {
-    override suspend fun insert(cityDTO: CityDTO) {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getAll(): List<CityDTO> {
-        TODO("Not yet implemented")
-    }
-
-    override suspend fun getById(id: String): CityDTO? {
-        TODO("Not yet implemented")
-    }
-}
-
-object CityMockFactory : CityRepository {
     override suspend fun insert(cityDTO: CityDTO) = Unit
 
-    override suspend fun getAll(): List<CityDTO> =
-        listOf()
-
-    override suspend fun getById(id: String): CityDTO? {
-        TODO("Not yet implemented")
+    override suspend fun getAll(): List<CityDTO> = CityMockFactory.CityMock.entries.map {
+        CityMockFactory.getCity(it)
     }
+
+    override suspend fun getById(id: String): CityDTO? = getAll().find { it.cityId == id }
+}
+
+object CityMockFactory {
+
+    fun getCity(cityMock: CityMock): CityDTO =
+        CityDTO(
+            cityId = cityMock.cityId,
+            nameEn = cityMock.nameEn,
+            nameRu = cityMock.nameRu,
+            descriptionEn = cityMock.descriptionEn,
+            descriptionRu = cityMock.descriptionRu,
+            countryId = cityMock.countryId,
+            population = cityMock.population,
+            latitude = cityMock.latitude,
+            longitude = cityMock.longitude
+        )
 
     enum class CityMock(
         val cityId: String,
@@ -32,7 +34,7 @@ object CityMockFactory : CityRepository {
         val nameRu: String,
         val descriptionEn: String,
         val descriptionRu: String,
-        val imagesUrls: List<String>,
+        val countryId: Long,
         val population: Int,
         val latitude: Double,
         val longitude: Double,
@@ -47,7 +49,7 @@ object CityMockFactory : CityRepository {
             nameRu = "Токио",
             descriptionEn = "Tokyo description",
             descriptionRu = "Токио описание",
-            imagesUrls = listOf(),
+            countryId = CountriesMockFactory.CountryMock.Japan.countryId,
             population = 13_960_000,
             latitude = 35.652832,
             longitude = 139.839478,
@@ -59,7 +61,7 @@ object CityMockFactory : CityRepository {
             nameRu = "Осака",
             descriptionEn = "Osaka description",
             descriptionRu = "Осака описание",
-            imagesUrls = listOf(),
+            countryId = CountriesMockFactory.CountryMock.Japan.countryId,
             population = 2_691_000,
             latitude = 34.672314,
             longitude = 135.484802,
@@ -75,7 +77,7 @@ object CityMockFactory : CityRepository {
             nameRu = "",
             descriptionEn = "",
             descriptionRu = "",
-            imagesUrls = listOf(),
+            countryId = CountriesMockFactory.CountryMock.USA.countryId,
             population = 0,
             latitude = 0.0,
             longitude = 0.0,

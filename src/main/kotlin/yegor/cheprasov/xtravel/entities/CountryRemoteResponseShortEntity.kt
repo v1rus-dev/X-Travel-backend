@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CountryRemoteResponseShortEntity(
-    val countryId: Int,
+    val countryId: Long,
     val mainPhotoUrl: String? = null,
     val countryNameEn: String,
     val countryNameRu: String,

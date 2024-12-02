@@ -18,6 +18,7 @@ fun Application.module() {
     configureDatabases()
     configureMonitoring()
     configureRouting()
+    configureFiles()
 
     configureMainRouting()
     configureRegisterRouting()
