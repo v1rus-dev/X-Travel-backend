@@ -1,7 +1,6 @@
 package yegor.cheprasov.xtravel.features.country
 
 import kotlinx.serialization.Serializable
-import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
 
 @Serializable
 data class CountryResponseRemote(

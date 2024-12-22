@@ -2,14 +2,11 @@ package yegor.cheprasov.xtravel.data.repositories.user
 
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.dao.id.IntIdTable
 import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.Database
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.transactions.transaction
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
-import yegor.cheprasov.xtravel.data.database.entities.users.UserDTO
+import yegor.cheprasov.xtravel.data.database.dto.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.Users.createdAt
 import yegor.cheprasov.xtravel.data.repositories.user.Users.updatedAt
 import java.util.UUID

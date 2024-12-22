@@ -4,7 +4,7 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
-import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
 
 class CityRepositoryImpl(
     private val databaseProvider: DatabaseProvider

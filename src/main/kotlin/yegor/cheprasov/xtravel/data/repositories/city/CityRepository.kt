@@ -1,6 +1,6 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
-import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
 
 interface CityRepository {
 

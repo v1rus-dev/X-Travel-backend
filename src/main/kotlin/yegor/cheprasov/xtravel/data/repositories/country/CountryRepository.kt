@@ -1,7 +1,7 @@
 package yegor.cheprasov.xtravel.data.repositories.country
 
-import yegor.cheprasov.xtravel.data.database.entities.country.CountryDTO
-import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 
 interface CountryRepository {
 

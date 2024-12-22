@@ -1,6 +1,6 @@
 package yegor.cheprasov.xtravel.mappers
 
-import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.entities.CountryRemoteResponseShortEntity
 import yegor.cheprasov.xtravel.features.country.ShortCountry
 
@@ -11,7 +11,7 @@ object CountryMapper {
             mainPhotoUrl = getMainPhotoURL(shortCountryDTO.mainFolderName),
             countryNameEn = shortCountryDTO.countryNameEn,
             countryNameRu = shortCountryDTO.countryNameRu,
-            flagUrl = shortCountryDTO.flagUrl ?: getFlagUrl(shortCountryDTO.mainFolderName),
+            flagUrl = shortCountryDTO.flagUrl?.ifEmpty { getFlagUrl(shortCountryDTO.mainFolderName) } ?: getFlagUrl(shortCountryDTO.mainFolderName),
             capitalId = shortCountryDTO.capitalId,
             capitalNameEn = shortCountryDTO.capitalNameEn,
             capitalNameRu = shortCountryDTO.capitalNameRu
@@ -23,7 +23,7 @@ object CountryMapper {
             mainPhotoUrl = getMainPhotoURL(shortCountryDTO.mainFolderName),
             countryNameEn = shortCountryDTO.countryNameEn,
             countryNameRu = shortCountryDTO.countryNameRu,
-            flagUrl = shortCountryDTO.flagUrl ?: getFlagUrl(shortCountryDTO.mainFolderName),
+            flagUrl = shortCountryDTO.flagUrl?.ifEmpty { getFlagUrl(shortCountryDTO.mainFolderName) } ?: getFlagUrl(shortCountryDTO.mainFolderName),
             capitalId = shortCountryDTO.capitalId,
             capitalNameEn = shortCountryDTO.capitalNameEn,
             capitalNameRu = shortCountryDTO.capitalNameRu
@@ -33,5 +33,5 @@ object CountryMapper {
         "resources/countries/$mainFolderName/images/main.jpg"
 
     private fun getFlagUrl(mainFolderName: String): String =
-        "resources/countries/$mainFolderName/images/flag.jpg"
+        "resources/countries/$mainFolderName/images/flag.svg"
 }

@@ -1,6 +1,6 @@
 package yegor.cheprasov.xtravel.mappers
 
-import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
 import yegor.cheprasov.xtravel.entities.CityRemoteResponseShortEntity
 
 object CityMapper {

@@ -4,8 +4,8 @@ import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
-import yegor.cheprasov.xtravel.data.database.entities.country.CountryDTO
-import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.data.repositories.city.City
 import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameEn
 import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameRu

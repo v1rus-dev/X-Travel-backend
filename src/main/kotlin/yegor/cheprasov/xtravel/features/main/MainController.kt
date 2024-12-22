@@ -4,8 +4,8 @@ import io.ktor.server.application.*
 import io.ktor.server.response.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
-import yegor.cheprasov.xtravel.data.database.entities.cities.CityDTO
-import yegor.cheprasov.xtravel.data.database.entities.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.data.repositories.city.CityRepository
 import yegor.cheprasov.xtravel.data.repositories.country.CountryRepository
 import yegor.cheprasov.xtravel.mappers.CityMapper
