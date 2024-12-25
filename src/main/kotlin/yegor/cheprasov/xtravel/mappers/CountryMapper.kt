@@ -4,6 +4,7 @@ import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.entities.CountryRemoteResponseShortEntity
 import yegor.cheprasov.xtravel.features.country.ShortCountry
 
+/*
 object CountryMapper {
     fun mapShortDTOtoNetwork(shortCountryDTO: ShortCountryDTO): ShortCountry =
         ShortCountry(
@@ -35,3 +36,5 @@ object CountryMapper {
     private fun getFlagUrl(mainFolderName: String): String =
         "resources/countries/$mainFolderName/images/flag.svg"
 }
+
+ */

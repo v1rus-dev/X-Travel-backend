@@ -1,36 +1,25 @@
 package yegor.cheprasov.xtravel.data.repositories.country
 
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
-import org.jetbrains.exposed.sql.*
+import kotlinx.coroutines.Deferred
+import org.jetbrains.exposed.sql.Count
+import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
-import yegor.cheprasov.xtravel.data.repositories.city.City
-import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameEn
-import yegor.cheprasov.xtravel.data.repositories.country.Countries.countryNameRu
+import yegor.cheprasov.xtravel.data.database.tables.CountryTable
 
 class CountryRepositoryImpl(
     private val databaseProvider: DatabaseProvider
 ) : CountryRepository {
 
-    override suspend fun insert(countryDTO: CountryDTO) {
-        databaseProvider.dbQuery {
-            Countries.insert {
-                it[countryNameEn] = countryDTO.countryNameEn
-                it[countryNameRu] = countryDTO.countryNameRu
-                it[countryDescriptionEn] = countryDTO.countryDescriptionEn
-                it[countryDescriptionRu] = countryDTO.countryDescriptionRu
-                it[capitalId] = countryDTO.capitalId
-                it[population] = countryDTO.population
-            }
-        }
-    }
-
     override suspend fun fetchByCountryId(countryId: Long): CountryDTO? {
         return try {
             val country =
-                databaseProvider.dbQuery { Countries.select { Countries.countryDescriptionRu.eq("") }.single() }
+                databaseProvider.dbQuery { CountryTable.select { CountryTable.id.eq(countryId) }.single() }
             country.mapToCountryDTO()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -40,7 +29,7 @@ class CountryRepositoryImpl(
 
     override suspend fun fetchAllCountries(): List<CountryDTO> {
         return try {
-            val list = databaseProvider.dbQuery { Countries.selectAll() }.toCountryDTOList()
+            val list = databaseProvider.dbQuery { CountryTable.selectAll() }.map { it.mapToCountryDTO() }
             list
         } catch (e: Exception) {
             e.printStackTrace()
@@ -48,64 +37,36 @@ class CountryRepositoryImpl(
         }
     }
 
-    override suspend fun fetchTrendingCountry(): List<ShortCountryDTO> {
-        return try {
-            databaseProvider.dbQuery {
-                Countries.innerJoin(City, onColumn = { id }, otherColumn = { countryId }).slice(
-                    Countries.id,
-                    countryNameEn,
-                    countryNameRu,
-                    City.id,
-                    City.nameEn,
-                    City.nameRu,
-                    Countries.mainFolderName,
-                )
-                    .selectAll()
-                    .limit(5)
-                    .map {
-                        ShortCountryDTO(
-                            countryId = it[Countries.id].value,
-                            countryNameEn = it[countryNameEn],
-                            countryNameRu = it[countryNameRu],
-                            capitalId = it[City.id].value,
-                            capitalNameEn = it[City.nameEn],
-                            capitalNameRu = it[City.nameRu],
-                            mainFolderName = it[Countries.mainFolderName]
-                        )
-                    }
-            }
+    override suspend fun fetchAllCountriesShort(): Deferred<List<ShortCountryDTO>> = suspendedTransactionAsync {
+        return@suspendedTransactionAsync try {
+            val list = databaseProvider.dbQuery { CountryTable.selectAll() }.map { it.mapToShortCountryDTO() }
+            list
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()
         }
     }
 
-    private fun Query.toCountryDTOList(): List<CountryDTO> =
-        this.map { country ->
-            country.mapToCountryDTO()
-        }
-
     private fun ResultRow.mapToCountryDTO(): CountryDTO =
         CountryDTO(
-            countryId = this[Countries.id].value,
-            countryNameEn = this[countryNameEn],
-            countryNameRu = this[countryNameRu],
-            countryDescriptionEn = this[Countries.countryDescriptionEn],
-            countryDescriptionRu = this[Countries.countryDescriptionRu],
-            capitalId = this[Countries.capitalId],
-            population = this[Countries.population],
-            mainFolderName = this[Countries.mainFolderName]
+            countryId = this[CountryTable.id].value,
+            countryNameRu = this[CountryTable.nameRu],
+            countryNameEn = this[CountryTable.nameEn],
+            countryDescriptionRu = this[CountryTable.descriptionRu],
+            countryDescriptionEn = this[CountryTable.descriptionEn],
+            population = this[CountryTable.population],
+            latitude = this[CountryTable.latitude],
+            longitude = this[CountryTable.longitude],
+            folderName = this[CountryTable.folderName],
+            shortName = this[CountryTable.shortName],
         )
-}
 
-object Countries : IdTable<Long>() {
-    override val id: Column<EntityID<Long>> = long("country_id").entityId()
-
-    val countryNameEn = varchar("country_name_en", 60)
-    val countryNameRu = varchar("country_name_ru", 60)
-    val countryDescriptionEn = text("country_description_en")
-    val countryDescriptionRu = text("country_description_ru")
-    val capitalId = varchar("capital_id", 60)
-    val population = integer("population")
-    val mainFolderName = varchar("main_folder_name", 30)
+    private fun ResultRow.mapToShortCountryDTO(): ShortCountryDTO =
+        ShortCountryDTO(
+            countryId = this[CountryTable.id].value,
+            countryNameRu = this[CountryTable.nameRu],
+            countryNameEn = this[CountryTable.nameEn],
+            folderName = this[CountryTable.folderName],
+            shortName = this[CountryTable.shortName],
+        )
 }

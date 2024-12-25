@@ -7,7 +7,7 @@ object CityMapper {
 
     fun mapCityDTOtoShortNetwork(cityDTO: CityDTO, countyMainFolderName: String): CityRemoteResponseShortEntity =
         CityRemoteResponseShortEntity(
-            cityId = cityDTO.cityId,
+            cityId = cityDTO.id,
             nameEn = cityDTO.nameEn,
             nameRu = cityDTO.nameRu,
             previewURL = getPreviewURL(cityDTO, countyMainFolderName),

@@ -4,7 +4,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class CityRemoteResponseShortEntity(
-    val cityId: String,
+    val cityId: Long,
     val nameEn: String,
     val nameRu: String,
     val previewURL: String

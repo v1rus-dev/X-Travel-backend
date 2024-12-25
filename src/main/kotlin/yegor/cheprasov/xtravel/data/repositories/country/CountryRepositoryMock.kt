@@ -1,10 +1,12 @@
 package yegor.cheprasov.xtravel.data.repositories.country
 
+import kotlinx.coroutines.CompletableDeferred
+import kotlinx.coroutines.Deferred
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 
+
 class CountryRepositoryMock : CountryRepository {
-    override suspend fun insert(countryDTO: CountryDTO) = Unit
 
     override suspend fun fetchByCountryId(countryId: Long): CountryDTO =
         CountriesMockFactory.getCountry(CountriesMockFactory.CountryMock.Japan)
@@ -15,11 +17,7 @@ class CountryRepositoryMock : CountryRepository {
             CountriesMockFactory.getCountry(CountriesMockFactory.CountryMock.USA)
         )
 
-    override suspend fun fetchTrendingCountry(): List<ShortCountryDTO> =
-        listOf(
-            CountriesMockFactory.getShortCountry(CountriesMockFactory.CountryMock.Japan),
-            CountriesMockFactory.getShortCountry(CountriesMockFactory.CountryMock.USA)
-        )
+    override suspend fun fetchAllCountriesShort(): Deferred<List<ShortCountryDTO>> = CompletableDeferred(emptyList())
 }
 
 object CountriesMockFactory {
@@ -31,9 +29,10 @@ object CountriesMockFactory {
             countryNameRu = countryMock.countryNameRu,
             countryDescriptionEn = countryMock.countryDescriptionEn,
             countryDescriptionRu = countryMock.countryDescriptionRu,
-            capitalId = countryMock.capitalId,
             population = countryMock.population,
-            mainFolderName = countryMock.mainFolderName
+            folderName = countryMock.mainFolderName,
+            latitude = 0.0,
+            longitude = 0.0,
         )
 
     fun getShortCountry(countryMock: CountryMock): ShortCountryDTO =
@@ -41,11 +40,7 @@ object CountriesMockFactory {
             countryId = countryMock.countryId,
             countryNameEn = countryMock.countryNameEn,
             countryNameRu = countryMock.countryNameRu,
-            flagUrl = countryMock.flagUrl,
-            capitalId = countryMock.capitalId,
-            capitalNameRu = "Мок",
-            capitalNameEn = "Mock",
-            mainFolderName = countryMock.mainFolderName
+            folderName = ""
         )
 
     enum class CountryMock(

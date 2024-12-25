@@ -9,13 +9,13 @@ data class GetAllCitiesResponseRemote(
 
 @Serializable
 data class CityResponse(
-    val cityId: String,
+    val cityId: Long,
     val nameEn: String,
     val nameRu: String,
     val descriptionEn: String,
     val descriptionRu: String,
     val imagesUrls: List<String>,
-    val population: Int,
+    val population: Int?,
     val latitude: Double,
     val longitude: Double,
 )

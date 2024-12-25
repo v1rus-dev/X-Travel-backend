@@ -12,6 +12,7 @@ object UsersTable : IdTable<UUID>(name = "users") {
     val login = varchar("login", length = 25)
     val password_hash = varchar("password_hash", length = 255)
     val email = varchar("email", length = 25)
+    val name = varchar("name", length = 30)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
 }

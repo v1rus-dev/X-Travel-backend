@@ -14,6 +14,8 @@ class DatabaseProvider : DatabaseProviderContract, KoinComponent {
     private val dispatcher: CoroutineDispatcher = newFixedThreadPoolContext(5, "database-pool")
     private var database: Database? = null
 
+    val providedDatabase get() = database
+
     override fun init() {
         database = createDatabase()
     }

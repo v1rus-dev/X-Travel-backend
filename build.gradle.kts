@@ -46,6 +46,8 @@ dependencies {
     implementation("io.ktor:ktor-server-netty-jvm")
     implementation("ch.qos.logback:logback-classic:$logback_version")
 
+    implementation("at.favre.lib:bcrypt:0.10.2")
+
     implementation("io.insert-koin:koin-ktor:3.5.6")
 
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")

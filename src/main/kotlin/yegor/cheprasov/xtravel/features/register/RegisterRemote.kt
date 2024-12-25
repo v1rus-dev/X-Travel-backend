@@ -7,8 +7,7 @@ data class RegisterReceiveRemote(
     val login: String,
     val email: String,
     val password: String,
-    val firstName: String,
-    val lastName: String
+    val name: String
 )
 
 @Serializable

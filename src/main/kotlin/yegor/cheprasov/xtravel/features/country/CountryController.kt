@@ -1,26 +1,41 @@
 package yegor.cheprasov.xtravel.features.country
 
+import io.ktor.http.*
 import io.ktor.server.application.*
+import io.ktor.server.plugins.*
+import io.ktor.server.request.*
 import io.ktor.server.response.*
 import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import yegor.cheprasov.xtravel.data.repositories.country.CountryRepository
-import yegor.cheprasov.xtravel.mappers.CountryMapper
+import yegor.cheprasov.xtravel.features.country.mapper.CountryMapper
+import yegor.cheprasov.xtravel.utils.FileService
+import yegor.cheprasov.xtravel.utils.getWebAddress
 
 class CountryController(
     private val call: ApplicationCall
 ) : KoinComponent {
 
     private val countryRepository: CountryRepository by inject()
+    private val fileService: FileService by inject()
 
     suspend fun getCountries() {
-        val countries = countryRepository.fetchTrendingCountry()
+        val countries = countryRepository.fetchAllCountriesShort().await()
+        println("Countries: $countries")
+        val x = fileService.listAllFiles("countries/japan/images")
+        println("call: ")
 
-        val response = CountryResponseRemote(
-            countries = countries.map { CountryMapper.mapShortDTOtoNetwork(it) }
-        )
+        val mappedCountries = countries.map {
+            CountryMapper.mapToShort(it, fileService, call.getWebAddress())
+        }
 
-        call.respond(response)
+        call.respond(HttpStatusCode.OK, CountryResponseRemote(countries = mappedCountries))
+//
+//        val response = CountryResponseRemote(
+//            countries = countries.map { CountryMapper.mapShortDTOtoNetwork(it) }
+//        )
+//
+//        call.respond(response)
     }
 
 }

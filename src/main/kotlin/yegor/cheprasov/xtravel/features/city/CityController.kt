@@ -15,7 +15,7 @@ class CityController(
     suspend fun getAllCities() {
         val cities = cityRepository.getAll().map {
             CityResponse(
-                cityId = it.cityId,
+                cityId = it.id,
                 nameEn = it.nameEn,
                 nameRu = it.nameRu,
                 descriptionEn = it.descriptionEn,

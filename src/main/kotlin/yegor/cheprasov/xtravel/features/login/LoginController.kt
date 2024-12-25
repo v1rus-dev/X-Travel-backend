@@ -1,5 +1,6 @@
 package yegor.cheprasov.xtravel.features.login
 
+import at.favre.lib.crypto.bcrypt.BCrypt
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.request.*
@@ -18,22 +19,22 @@ class LoginController(
 
     suspend fun performLogin() {
         val user = call.receive<LoginReceiveRemote>()
-        // Check username and password
 
-        val userDTO = userRepository.fetchUser(user.login)
+        val userDTO = userRepository.fetchUser(user.email).await()
 
         if (userDTO == null) {
             call.respond(HttpStatusCode.Conflict, "User not exist")
             return
         }
 
-        if (user.password != userDTO.passwordHash) {
-            call.respond(HttpStatusCode.Conflict, "Password is not correct")
-            return
-        }
+        val result = BCrypt.verifyer().verify(user.password.toCharArray(), userDTO.passwordHash)
 
-        val token = jwtConfig.makeToken(login = user.login)
-        call.respond(LoginResponseRemote(token = token))
+        if (!result.verified) {
+            call.respond(HttpStatusCode.Unauthorized, "User not exist")
+        } else {
+            val token = jwtConfig.makeToken(login = user.email)
+            call.respond(HttpStatusCode.OK, LoginResponseRemote(token, name = userDTO.name, email = userDTO.email))
+        }
     }
 
 }

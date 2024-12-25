@@ -4,20 +4,19 @@ import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
 import yegor.cheprasov.xtravel.data.repositories.country.CountriesMockFactory
 
 class CityRepositoryMock : CityRepository {
-    override suspend fun insert(cityDTO: CityDTO) = Unit
 
     override suspend fun getAll(): List<CityDTO> = CityMockFactory.CityMock.entries.map {
         CityMockFactory.getCity(it)
     }
 
-    override suspend fun getById(id: String): CityDTO? = getAll().find { it.cityId == id }
+    override suspend fun getById(id: Long): CityDTO? = getAll().find { it.id == id }
 }
 
 object CityMockFactory {
 
     fun getCity(cityMock: CityMock): CityDTO =
         CityDTO(
-            cityId = cityMock.cityId,
+            id = cityMock.cityId,
             nameEn = cityMock.nameEn,
             nameRu = cityMock.nameRu,
             descriptionEn = cityMock.descriptionEn,
@@ -25,11 +24,12 @@ object CityMockFactory {
             countryId = cityMock.countryId,
             population = cityMock.population,
             latitude = cityMock.latitude,
-            longitude = cityMock.longitude
+            longitude = cityMock.longitude,
+            folderName = ""
         )
 
     enum class CityMock(
-        val cityId: String,
+        val cityId: Long,
         val nameEn: String,
         val nameRu: String,
         val descriptionEn: String,
@@ -44,7 +44,7 @@ object CityMockFactory {
          * Japan
          */
         Tokyo(
-            cityId = "tokyo_id",
+            cityId = 0,
             nameEn = "Tokyo",
             nameRu = "Токио",
             descriptionEn = "Tokyo description",
@@ -56,7 +56,7 @@ object CityMockFactory {
             mainFolderName = "tokyo"
         ),
         Osaka(
-            cityId = "city_id",
+            cityId = 1,
             nameEn = "Osaka",
             nameRu = "Осака",
             descriptionEn = "Osaka description",
@@ -72,7 +72,7 @@ object CityMockFactory {
          * USA
          */
         Washington(
-            cityId = "",
+            cityId = 2,
             nameEn = "",
             nameRu = "",
             descriptionEn = "",

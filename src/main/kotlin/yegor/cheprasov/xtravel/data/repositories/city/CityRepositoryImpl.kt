@@ -1,32 +1,19 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
-import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.tables.CityTable
+import yegor.cheprasov.xtravel.data.database.tables.CountryTable
 
 class CityRepositoryImpl(
     private val databaseProvider: DatabaseProvider
 ) : CityRepository {
-    override suspend fun insert(cityDTO: CityDTO) {
-        databaseProvider.dbQuery {
-            City.insert {
-                it[nameEn] = cityDTO.nameEn
-                it[nameRu] = cityDTO.nameRu
-                it[descriptionEn] = cityDTO.descriptionEn
-                it[descriptionRu] = cityDTO.descriptionRu
-                it[population] = cityDTO.population
-                it[latitude] = cityDTO.latitude
-                it[longitude] = cityDTO.longitude
-                it[countryId] = cityDTO.countryId
-            }
-        }
-    }
 
     override suspend fun getAll(): List<CityDTO> {
         return try {
-            val cities = databaseProvider.dbQuery { City.selectAll() }
+            val cities = databaseProvider.dbQuery { CityTable.selectAll() }
             cities.toCityDTOList()
         } catch (e: Exception) {
             e.printStackTrace()
@@ -34,9 +21,9 @@ class CityRepositoryImpl(
         }
     }
 
-    override suspend fun getById(id: String): CityDTO? {
+    override suspend fun getById(id: Long): CityDTO? {
        return try {
-           val city = databaseProvider.dbQuery { City.select { City.id.eq(id) }.single() }
+           val city = databaseProvider.dbQuery { CountryTable.select { CountryTable.id.eq(id) }.single() }
            city.mapToCityDTO()
        } catch (e: Exception) {
            e.printStackTrace()
@@ -53,28 +40,16 @@ class CityRepositoryImpl(
 
     private fun ResultRow.mapToCityDTO(): CityDTO =
         CityDTO(
-            cityId = this[City.id].value,
-            nameEn = this[City.nameEn],
-            nameRu = this[City.nameRu],
-            descriptionEn = this[City.descriptionEn],
-            descriptionRu = this[City.descriptionRu],
-            population = this[City.population],
-            latitude = this[City.latitude],
-            longitude = this[City.longitude],
-            countryId = this[City.countryId]
+            id = this[CityTable.id].value,
+            nameEn = this[CityTable.nameEn],
+            nameRu = this[CityTable.nameRu],
+            descriptionEn = this[CityTable.descriptionEn],
+            descriptionRu = this[CityTable.descriptionRu],
+            population = this[CityTable.population],
+            latitude = this[CityTable.latitude],
+            longitude = this[CityTable.longitude],
+            countryId = this[CityTable.countryId],
+            folderName = this[CityTable.folderName],
         )
 
-}
-
-object City : IdTable<String>("cities") {
-    override val id: Column<EntityID<String>> = varchar("city_id", 60).entityId()
-
-    val nameEn = varchar("name_en", 60)
-    val nameRu = varchar("name_ru", 60)
-    val descriptionEn = varchar("description_en", 60)
-    val descriptionRu = varchar("description_ru", 60)
-    val population = integer("population")
-    val latitude = double("latitude")
-    val longitude = double("longitude")
-    val countryId = long("country_id")
 }
