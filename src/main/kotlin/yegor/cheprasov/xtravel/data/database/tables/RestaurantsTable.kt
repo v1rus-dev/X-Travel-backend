@@ -7,12 +7,12 @@ import org.jetbrains.exposed.sql.Column
 object RestaurantsTable : IdTable<Long>(name = "restaurants") {
     override val id: Column<EntityID<Long>> = long("id").entityId()
 
-    val cityId = integer("city_id")
+    val cityId = reference("city_id", CityTable)
     val nameRu = varchar("name_ru", 60)
     val nameEn = varchar("name_en", 60)
     val descriptionRu = text("description_ru")
     val descriptionEn = text("description_en")
-    val restaurantType = varchar("restaurant_type", 30)
+    val restaurantType = reference("restaurant_type", RestaurantTypeTable.type)
     val address = varchar("address", 100)
     val latitude = double("latitude")
     val longitude = double("longitude")

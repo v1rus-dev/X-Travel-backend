@@ -15,4 +15,5 @@ object UsersTable : IdTable<UUID>(name = "users") {
     val name = varchar("name", length = 30)
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
+    val role = varchar("role", length = 10)
 }

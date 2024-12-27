@@ -10,6 +10,7 @@ import org.koin.core.component.KoinComponent
 import org.koin.core.component.inject
 import yegor.cheprasov.xtravel.data.database.dto.users.UserDTO
 import yegor.cheprasov.xtravel.data.repositories.user.UserRepository
+import yegor.cheprasov.xtravel.entities.users.UserRole
 import yegor.cheprasov.xtravel.security.JwtConfig
 import java.util.*
 
@@ -30,6 +31,7 @@ class RegisterController(
         if (userDTO != null) {
             call.respond(HttpStatusCode.Conflict, "User already exists")
         } else {
+            val userId = UUID.randomUUID()
             val user = UserDTO(
                 userId = UUID.randomUUID(),
                 login = registerReceiveRemote.login,
@@ -37,11 +39,12 @@ class RegisterController(
                 email = registerReceiveRemote.email,
                 name = registerReceiveRemote.name,
                 createdAt = System.currentTimeMillis(),
-                updatedAt = System.currentTimeMillis()
+                updatedAt = System.currentTimeMillis(),
+                role = UserRole.Default
             )
 
             userRepository.insert(user)
-            val token = jwtConfig.makeToken(user.login)
+            val token = jwtConfig.makeToken(user.login, role = UserRole.Default.id, userId = userId.toString())
             call.respond(RegisterResponseRemote(token = token))
         }
     }

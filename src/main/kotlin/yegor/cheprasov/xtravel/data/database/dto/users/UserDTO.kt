@@ -1,5 +1,6 @@
 package yegor.cheprasov.xtravel.data.database.dto.users
 
+import yegor.cheprasov.xtravel.entities.users.UserRole
 import java.util.UUID
 
 data class UserDTO(
@@ -9,5 +10,6 @@ data class UserDTO(
     val email: String,
     val name: String,
     val createdAt: Long,
-    val updatedAt: Long
+    val updatedAt: Long,
+    val role: UserRole
 )

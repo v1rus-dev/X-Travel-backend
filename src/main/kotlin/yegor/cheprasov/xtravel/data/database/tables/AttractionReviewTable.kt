@@ -8,8 +8,8 @@ import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 object AttractionReviewTable : IdTable<Long>("attraction_reviews") {
     override val id: Column<EntityID<Long>> = long("id").entityId()
 
-    val attractionId = integer("attraction_id")
-    val userId = uuid("user_id").nullable()
+    val attractionId = reference("attraction_id", AttractionTable)
+    val userId = reference("user_id", UsersTable).nullable()
     val rating = float("rating")
     val reviewText = text("review_text").nullable()
     val createdAt = timestamp("created_at")

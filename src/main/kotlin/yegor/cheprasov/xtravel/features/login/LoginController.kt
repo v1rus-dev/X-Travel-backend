@@ -32,7 +32,7 @@ class LoginController(
         if (!result.verified) {
             call.respond(HttpStatusCode.Unauthorized, "User not exist")
         } else {
-            val token = jwtConfig.makeToken(login = user.email)
+            val token = jwtConfig.makeToken(login = user.email, role = userDTO.role.id, userId = userDTO.userId.toString())
             call.respond(HttpStatusCode.OK, LoginResponseRemote(token, name = userDTO.name, email = userDTO.email))
         }
     }

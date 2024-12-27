@@ -17,7 +17,7 @@ object AttractionTable : IdTable<Long>(name = "attractions") {
     val rating = float("rating").nullable()
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")
-    val cityId = long("city_id").nullable()
-    val attractionType = varchar("attraction_type", 30)
+    val cityId = reference("city_id", CityTable).nullable()
+    val attractionType = reference("attraction_type", AttractionTypeTable.type)
     val folderName = varchar("folder_name", 30)
 }

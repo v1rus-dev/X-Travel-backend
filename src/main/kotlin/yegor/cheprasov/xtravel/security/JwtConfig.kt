@@ -3,7 +3,9 @@ package yegor.cheprasov.xtravel.security
 import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
+import com.auth0.jwt.interfaces.Payload
 import io.ktor.server.application.*
+import io.ktor.server.auth.jwt.*
 import java.util.*
 
 class JwtConfig(private val environment: ApplicationEnvironment) {
@@ -25,12 +27,17 @@ class JwtConfig(private val environment: ApplicationEnvironment) {
         .withIssuer(issuer)
         .build()
 
-    fun makeToken(login: String): String =
+    fun makeToken(login: String, role: String, userId: String): String =
         JWT.create()
             .withAudience(audience)
             .withIssuer(issuer)
             .withClaim("login", login)
+            .withClaim("role", role)
+            .withClaim("userId", userId)
+            .withIssuedAt(Date())
             .withExpiresAt(Date(System.currentTimeMillis() + validityInMs))
             .sign(algorithm)
 
 }
+
+fun JWTPrincipal.getUserId(): String = this.payload.getClaim("userId").asString()

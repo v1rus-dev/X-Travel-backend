@@ -1,17 +1,25 @@
 package yegor.cheprasov.xtravel.features.country
 
 import io.ktor.server.application.*
-import io.ktor.server.response.*
 import io.ktor.server.routing.*
-import java.io.File
 
 fun Application.configureCountryRouting() {
-
+    val controller = CountryController()
     routing {
-        get("/countries") {
-            val countryController = CountryController(call)
-            countryController.getCountries()
+        get("/country/all") {
+            controller.getCountries(call)
+        }
+
+        get("/country/{country_id/info") {
+            controller.getCountryInfo(call)
+        }
+
+        get("/country/{country_id}/cities") {
+            controller.getCitiesForCountry(call)
+        }
+
+        get("/country/{country_id}/attractions") {
+            controller.getAttractionsForCountry(call)
         }
     }
-
 }

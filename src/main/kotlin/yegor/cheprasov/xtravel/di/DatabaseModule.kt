@@ -3,6 +3,8 @@ package yegor.cheprasov.xtravel.di
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
+import yegor.cheprasov.xtravel.data.repositories.changeRole.ChangeRoleRepository
+import yegor.cheprasov.xtravel.data.repositories.changeRole.ChangeRoleRepositoryImpl
 import yegor.cheprasov.xtravel.data.repositories.city.CityRepository
 import yegor.cheprasov.xtravel.data.repositories.city.CityRepositoryImpl
 import yegor.cheprasov.xtravel.data.repositories.city.CityRepositoryMock
@@ -27,11 +29,7 @@ fun databaseModule(): Module = module {
     }
 
     single<CountryRepository> {
-        if (BuildConfig.useMockInformation) {
-            CountryRepositoryMock()
-        } else {
-            CountryRepositoryImpl(get())
-        }
+        CountryRepositoryImpl(get())
     }
 
     single<UserProfileRepository> {
@@ -39,10 +37,10 @@ fun databaseModule(): Module = module {
     }
 
     single<CityRepository> {
-        if (BuildConfig.useMockInformation) {
-            CityRepositoryMock()
-        } else {
-            CityRepositoryImpl(get())
-        }
+        CityRepositoryImpl(get())
+    }
+
+    single<ChangeRoleRepository> {
+        ChangeRoleRepositoryImpl(get())
     }
 }

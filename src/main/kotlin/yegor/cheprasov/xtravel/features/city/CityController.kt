@@ -32,4 +32,12 @@ class CityController(
         )
     }
 
+    suspend fun getCityInfo() {
+
+    }
+
+    suspend fun getCityAttractions() {
+
+    }
+
 }

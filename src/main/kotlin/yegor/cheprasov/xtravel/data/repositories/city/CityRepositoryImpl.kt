@@ -48,7 +48,7 @@ class CityRepositoryImpl(
             population = this[CityTable.population],
             latitude = this[CityTable.latitude],
             longitude = this[CityTable.longitude],
-            countryId = this[CityTable.countryId],
+            countryId = this[CityTable.countryId].value,
             folderName = this[CityTable.folderName],
         )
 
