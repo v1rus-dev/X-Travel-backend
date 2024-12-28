@@ -1,4 +1,4 @@
-package yegor.cheprasov.xtravel.entities.users
+package yegor.cheprasov.xtravel.entities.enums
 
 enum class UserRole(val id: String) {
     Default("default"),

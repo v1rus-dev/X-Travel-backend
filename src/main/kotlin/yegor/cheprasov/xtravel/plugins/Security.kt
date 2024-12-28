@@ -7,9 +7,6 @@ import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
-import io.ktor.server.routing.*
-import io.ktor.server.sessions.*
-import io.ktor.util.*
 import org.koin.ktor.ext.inject
 import yegor.cheprasov.xtravel.security.JwtConfig
 
@@ -46,7 +43,7 @@ fun Application.configureJWT() {
                 }
             }
             realm = jwtConfig.realm
-            verifier(jwtConfig.verifier)
+            verifier(jwtConfig.accessTokenVerifier)
 
             challenge { defaultScheme, realm ->
                 call.respond(HttpStatusCode.Unauthorized, "Token is not valid or has expired")

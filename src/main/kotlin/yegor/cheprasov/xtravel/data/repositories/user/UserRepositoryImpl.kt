@@ -3,7 +3,6 @@ package yegor.cheprasov.xtravel.data.repositories.user
 import kotlinx.coroutines.Deferred
 import kotlinx.datetime.Instant
 import org.jetbrains.exposed.dao.id.EntityID
-import org.jetbrains.exposed.dao.id.EntityIDFactory
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
@@ -12,7 +11,7 @@ import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionA
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.users.UserDTO
 import yegor.cheprasov.xtravel.data.database.tables.UsersTable
-import yegor.cheprasov.xtravel.entities.users.UserRole
+import yegor.cheprasov.xtravel.entities.enums.UserRole
 import java.util.UUID
 
 class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserRepository {

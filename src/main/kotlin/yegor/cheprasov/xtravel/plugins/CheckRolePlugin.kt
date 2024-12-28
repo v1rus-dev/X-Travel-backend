@@ -13,7 +13,9 @@ import io.ktor.server.response.*
  *     val userController = UserController()
  *     routing {
  *     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
- *         install(RoleValidatingPlugin)
+ *         install(RoleValidatingPlugin) {
+ *              roles = setOf(UserRole.Default.id)
+ *         }
  *     !!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
  *         authenticate("auth-jwt") {
  *             get("/user/info") {
@@ -22,6 +24,22 @@ import io.ktor.server.response.*
  *         }
  *     }
  * }
+ *
+ *  * fun Application.configureUserRouting() {
+ *  *     val userController = UserController()
+ *  *     routing {
+ *                  authenticate("auth-jwt") {
+ *             route("/send-role-change-request") {
+ *                 install(RoleValidatingPlugin) {
+ *                     roles = setOf(UserRole.Default.id)
+ *                 }
+ *                 put {
+ *                     controller.requestUpdateRole(call)
+ *                 }
+ *             }
+ *             }
+ *  *     }
+ *  * }
  */
 
 val RoleValidatingPlugin = createRouteScopedPlugin(

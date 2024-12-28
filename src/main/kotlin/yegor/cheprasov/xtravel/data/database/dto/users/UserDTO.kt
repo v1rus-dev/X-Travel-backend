@@ -1,6 +1,6 @@
 package yegor.cheprasov.xtravel.data.database.dto.users
 
-import yegor.cheprasov.xtravel.entities.users.UserRole
+import yegor.cheprasov.xtravel.entities.enums.UserRole
 import java.util.UUID
 
 data class UserDTO(

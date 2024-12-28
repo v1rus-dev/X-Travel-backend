@@ -1,11 +1,9 @@
 package yegor.cheprasov.xtravel.data.repositories.country
 
 import kotlinx.coroutines.Deferred
-import org.jetbrains.exposed.sql.Count
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.selectAll
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO

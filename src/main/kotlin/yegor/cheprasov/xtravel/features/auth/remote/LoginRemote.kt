@@ -1,4 +1,4 @@
-package yegor.cheprasov.xtravel.features.login
+package yegor.cheprasov.xtravel.features.auth.remote
 
 import kotlinx.serialization.Serializable
 
@@ -10,7 +10,6 @@ data class LoginReceiveRemote(
 
 @Serializable
 data class LoginResponseRemote(
-    val token: String,
-    val name: String,
-    val email: String
+    val accessToken: String,
+    val refreshToken: String
 )

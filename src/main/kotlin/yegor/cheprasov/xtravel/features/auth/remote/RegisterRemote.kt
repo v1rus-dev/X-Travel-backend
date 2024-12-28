@@ -1,4 +1,4 @@
-package yegor.cheprasov.xtravel.features.register
+package yegor.cheprasov.xtravel.features.auth.remote
 
 import kotlinx.serialization.Serializable
 
@@ -12,5 +12,6 @@ data class RegisterReceiveRemote(
 
 @Serializable
 data class RegisterResponseRemote(
-    val token: String
+    val token: String,
+    val refreshToken: String
 )
