@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 object AttractionTable : IdTable<Long>(name = "attractions") {
-    override val id: Column<EntityID<Long>> = long("id").entityId()
+    override val id: Column<EntityID<Long>> = long("id").entityId().autoinc()
 
     val nameRu = varchar("name_ru", 100)
     val nameEn = varchar("name_en", 100)

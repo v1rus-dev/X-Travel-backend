@@ -5,7 +5,7 @@ import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Column
 
 object AttractionWebsiteTable : IdTable<Long>(name = "attraction_websites") {
-    override val id: Column<EntityID<Long>> = long("id").entityId()
+    override val id: Column<EntityID<Long>> = long("id").entityId().autoinc()
 
     val attractionId = reference("attraction_id", AttractionTable)
     val websiteUrl = varchar("website_url", 100)

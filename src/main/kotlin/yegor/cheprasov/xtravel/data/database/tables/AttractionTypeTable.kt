@@ -5,7 +5,8 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.Table
 
 object AttractionTypeTable : Table(name = "attraction_types") {
-    val type: Column<EntityID<String>> = varchar("type", 30).entityId()
+    val type: Column<EntityID<String>> = varchar("type", 30).entityId().autoinc()
+
     val nameRu = varchar("name_ru", 100)
     val nameEn = varchar("name_en", 100)
     val descriptionRu = text("description_ru").nullable()

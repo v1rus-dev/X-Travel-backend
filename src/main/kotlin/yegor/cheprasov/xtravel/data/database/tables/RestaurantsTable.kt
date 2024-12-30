@@ -5,7 +5,7 @@ import org.jetbrains.exposed.dao.id.IdTable
 import org.jetbrains.exposed.sql.Column
 
 object RestaurantsTable : IdTable<Long>(name = "restaurants") {
-    override val id: Column<EntityID<Long>> = long("id").entityId()
+    override val id: Column<EntityID<Long>> = long("id").entityId().autoinc()
 
     val cityId = reference("city_id", CityTable)
     val nameRu = varchar("name_ru", 60)

@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 object CityReviewTable : IdTable<Long>(name = "city_reviews") {
-    override val id: Column<EntityID<Long>> = long("id").entityId()
+    override val id: Column<EntityID<Long>> = long("id").entityId().autoinc()
 
     val cityId = reference("city_id", CityTable)
     val userId = reference("user_id", UsersTable).nullable()
