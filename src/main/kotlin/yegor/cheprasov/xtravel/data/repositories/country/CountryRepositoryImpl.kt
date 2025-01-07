@@ -8,14 +8,16 @@ import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionA
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
+import yegor.cheprasov.xtravel.data.database.tables.CountryInfoTable
+import yegor.cheprasov.xtravel.data.database.tables.CountryLocalizationTable
 import yegor.cheprasov.xtravel.data.database.tables.CountryTable
 
 class CountryRepositoryImpl(
     private val databaseProvider: DatabaseProvider
 ) : CountryRepository {
 
-    override suspend fun fetchByCountryId(countryId: Long): CountryDTO? {
-        return try {
+    override suspend fun fetchByCountryId(countryId: Long): Deferred<CountryDTO?> = suspendedTransactionAsync {
+        return@suspendedTransactionAsync try {
             val country =
                 databaseProvider.dbQuery { CountryTable.select { CountryTable.id.eq(countryId) }.single() }
             country.mapToCountryDTO()
@@ -25,10 +27,11 @@ class CountryRepositoryImpl(
         }
     }
 
-    override suspend fun fetchAllCountries(): List<CountryDTO> {
-        return try {
-            val list = databaseProvider.dbQuery { CountryTable.selectAll() }.map { it.mapToCountryDTO() }
-            list
+    override suspend fun fetchAllCountries(): Deferred<List<CountryDTO>> = suspendedTransactionAsync {
+        return@suspendedTransactionAsync  try {
+            (CountryTable innerJoin CountryInfoTable innerJoin CountryLocalizationTable)
+                .select { CountryLocalizationTable.languageCode eq "ru"  }
+                .map { it.mapToCountryDTO() }
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()
@@ -37,8 +40,9 @@ class CountryRepositoryImpl(
 
     override suspend fun fetchAllCountriesShort(): Deferred<List<ShortCountryDTO>> = suspendedTransactionAsync {
         return@suspendedTransactionAsync try {
-            val list = databaseProvider.dbQuery { CountryTable.selectAll() }.map { it.mapToShortCountryDTO() }
-            list
+            (CountryTable innerJoin CountryLocalizationTable)
+                .select { CountryLocalizationTable.languageCode eq "ru"  }
+                .map { it.mapToShortCountryDTO() }
         } catch (e: Exception) {
             e.printStackTrace()
             emptyList()
@@ -48,23 +52,18 @@ class CountryRepositoryImpl(
     private fun ResultRow.mapToCountryDTO(): CountryDTO =
         CountryDTO(
             countryId = this[CountryTable.id].value,
-            countryNameRu = this[CountryTable.nameRu],
-            countryNameEn = this[CountryTable.nameEn],
-            countryDescriptionRu = this[CountryTable.descriptionRu],
-            countryDescriptionEn = this[CountryTable.descriptionEn],
-            population = this[CountryTable.population],
-            latitude = this[CountryTable.latitude],
-            longitude = this[CountryTable.longitude],
+            countryName = this[CountryLocalizationTable.name],
+            countryDescription = this[CountryLocalizationTable.description],
+            area = this[CountryInfoTable.areaKm2],
             folderName = this[CountryTable.folderName],
-            shortName = this[CountryTable.shortName],
+            shortName = this[CountryLocalizationTable.shortName],
         )
 
     private fun ResultRow.mapToShortCountryDTO(): ShortCountryDTO =
         ShortCountryDTO(
             countryId = this[CountryTable.id].value,
-            countryNameRu = this[CountryTable.nameRu],
-            countryNameEn = this[CountryTable.nameEn],
+            countryName = this[CountryLocalizationTable.name],
             folderName = this[CountryTable.folderName],
-            shortName = this[CountryTable.shortName],
+            shortName = this[CountryLocalizationTable.shortName],
         )
 }

@@ -12,8 +12,7 @@ object CountryMapper {
         val mainImage = listAllFiles.firstOrNull { it.contains("main.jpg") } ?: listAllFiles.firstOrNull()
         return ShortCountry(
             countryId = dto.countryId,
-            countryNameRu = dto.countryNameRu,
-            countryNameEn = dto.countryNameEn,
+            countryName = dto.countryName,
             folderName = dto.folderName,
             shortName = dto.shortName,
             imageUrl = if (mainImage != null) {

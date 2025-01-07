@@ -17,13 +17,10 @@ class CountryController : KoinComponent {
 
     suspend fun getCountries(call: ApplicationCall) {
         val countries = countryRepository.fetchAllCountriesShort().await()
-        println("Countries: $countries")
-        val x = fileService.listAllFiles("countries/japan/images")
-        println("call: ")
 
         val mappedCountries = countries.map {
             CountryMapper.mapToShort(it, fileService, call.getWebAddress())
-        }
+        }.filter { it.imageUrl.isNotEmpty() }
 
         call.respond(HttpStatusCode.OK, CountryResponseRemote(countries = mappedCountries))
     }

@@ -16,8 +16,17 @@ class FileService(private val baseDirectory: String) {
      */
     fun listAllFiles(path: String): List<String> {
         val directory = File(baseDirectory, path)
-        if (!directory.exists() || !directory.isDirectory) {
-            throw IllegalArgumentException("Path $path does not exist or is not a directory")
+        // Проверяем, существует ли директория
+        if (!directory.exists()) {
+            // Создаем директорию, если её нет
+            if (!directory.mkdirs()) {
+                throw IllegalStateException("Failed to create directory at $path")
+            }
+        }
+
+        // Проверяем, является ли путь директорией
+        if (!directory.isDirectory) {
+            throw IllegalArgumentException("Path $path is not a directory")
         }
         return directory.walkTopDown()
             .filter { it.isFile }
