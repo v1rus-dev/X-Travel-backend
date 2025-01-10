@@ -9,6 +9,7 @@ import yegor.cheprasov.xtravel.features.favorites.configureFavoriteRouting
 import yegor.cheprasov.xtravel.features.main.configureMainRouting
 import yegor.cheprasov.xtravel.features.suggestPlace.configureSuggestPlace
 import yegor.cheprasov.xtravel.features.user.configureUserRouting
+import yegor.cheprasov.xtravel.features.utils.configureUtilsRouting
 import yegor.cheprasov.xtravel.plugins.*
 
 fun Application.module() {
@@ -21,6 +22,7 @@ fun Application.module() {
     configureMonitoring()
     configureRouting()
     configureFiles()
+    configureUtilsRouting()
 
     configureMainRouting()
     configureAuthRouting()
