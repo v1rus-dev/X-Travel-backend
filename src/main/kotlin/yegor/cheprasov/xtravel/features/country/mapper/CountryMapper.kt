@@ -6,9 +6,7 @@ import yegor.cheprasov.xtravel.utils.FileService
 
 object CountryMapper {
     fun mapToShort(dto: ShortCountryDTO, fileService: FileService, currentAddress: String): ShortCountry {
-        println("Folder name: ${dto.folderName}")
-        val listAllFiles = fileService.listAllFiles("countries/${dto.folderName}/images")
-        println("List all files: $listAllFiles")
+        val listAllFiles = fileService.listAllFiles("countries/${dto.folderName}/images").filter { !it.contains("flag.png") }
         val mainImage = listAllFiles.firstOrNull { it.contains("main.jpg") } ?: listAllFiles.firstOrNull()
         return ShortCountry(
             countryId = dto.countryId,
