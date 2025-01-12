@@ -6,10 +6,10 @@ import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 
 interface CountryRepository {
 
-    suspend fun fetchByCountryId(countryId: Long): Deferred<CountryDTO?>
+    suspend fun fetchByCountryId(countryId: Long, lang: String): Deferred<CountryDTO?>
 
-    suspend fun fetchAllCountries(): Deferred<List<CountryDTO>>
+    suspend fun fetchAllCountries(lang: String): Deferred<List<CountryDTO>>
 
-    suspend fun fetchAllCountriesShort(): Deferred<List<ShortCountryDTO>>
+    suspend fun fetchAllCountriesShort(lang: String): Deferred<List<ShortCountryDTO>>
 
 }

@@ -3,7 +3,6 @@ package yegor.cheprasov.xtravel.data.repositories.country
 import kotlinx.coroutines.Deferred
 import org.jetbrains.exposed.sql.ResultRow
 import org.jetbrains.exposed.sql.select
-import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
@@ -16,7 +15,7 @@ class CountryRepositoryImpl(
     private val databaseProvider: DatabaseProvider
 ) : CountryRepository {
 
-    override suspend fun fetchByCountryId(countryId: Long): Deferred<CountryDTO?> = suspendedTransactionAsync {
+    override suspend fun fetchByCountryId(countryId: Long, lang: String): Deferred<CountryDTO?> = suspendedTransactionAsync {
         return@suspendedTransactionAsync try {
             val country =
                 databaseProvider.dbQuery { CountryTable.select { CountryTable.id.eq(countryId) }.single() }
@@ -27,10 +26,10 @@ class CountryRepositoryImpl(
         }
     }
 
-    override suspend fun fetchAllCountries(): Deferred<List<CountryDTO>> = suspendedTransactionAsync {
+    override suspend fun fetchAllCountries(lang: String): Deferred<List<CountryDTO>> = suspendedTransactionAsync {
         return@suspendedTransactionAsync  try {
             (CountryTable innerJoin CountryInfoTable innerJoin CountryLocalizationTable)
-                .select { CountryLocalizationTable.languageCode eq "ru"  }
+                .select { CountryLocalizationTable.languageCode eq lang  }
                 .map { it.mapToCountryDTO() }
         } catch (e: Exception) {
             e.printStackTrace()
@@ -38,10 +37,10 @@ class CountryRepositoryImpl(
         }
     }
 
-    override suspend fun fetchAllCountriesShort(): Deferred<List<ShortCountryDTO>> = suspendedTransactionAsync {
+    override suspend fun fetchAllCountriesShort(lang: String): Deferred<List<ShortCountryDTO>> = suspendedTransactionAsync {
         return@suspendedTransactionAsync try {
             (CountryTable innerJoin CountryLocalizationTable)
-                .select { CountryLocalizationTable.languageCode eq "ru"  }
+                .select { CountryLocalizationTable.languageCode eq lang  }
                 .map { it.mapToShortCountryDTO() }
         } catch (e: Exception) {
             e.printStackTrace()

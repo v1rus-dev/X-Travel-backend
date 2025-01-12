@@ -4,11 +4,19 @@ import io.ktor.server.application.*
 import io.ktor.server.routing.*
 
 fun Application.configureMainRouting() {
+    val mainController = MainController()
 
     routing {
-        get("/main") {
-            val mainController = MainController(call)
-            mainController.getMain()
+        get("/main/countries") {
+            mainController.fetchCountries(call)
+        }
+
+        get("/main/cities") {
+            mainController.fetchCities(call)
+        }
+
+        get("/main/attractions") {
+            mainController.fetchAttractions(call)
         }
     }
 

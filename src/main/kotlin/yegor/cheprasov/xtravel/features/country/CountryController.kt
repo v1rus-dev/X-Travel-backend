@@ -16,7 +16,8 @@ class CountryController : KoinComponent {
     private val fileService: FileService by inject()
 
     suspend fun getCountries(call: ApplicationCall) {
-        val countries = countryRepository.fetchAllCountriesShort().await()
+        val lang = call.request.headers["lang"] ?: "ru"
+        val countries = countryRepository.fetchAllCountriesShort(lang).await()
 
         val mappedCountries = countries.map {
             CountryMapper.mapToShort(it, fileService, call.getWebAddress())
