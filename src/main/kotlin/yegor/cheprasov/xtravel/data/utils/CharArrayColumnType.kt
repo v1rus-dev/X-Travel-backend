@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
 
-class CharArrayColumnType : ColumnType() {
+class CharArrayColumnType : ColumnType<CharArray>() {
     override fun sqlType(): String = "TEXT"
 
     override fun valueFromDB(value: Any): CharArray {
@@ -15,11 +15,11 @@ class CharArrayColumnType : ColumnType() {
         }
     }
 
-    override fun notNullValueToDB(value: Any): Any {
+    override fun notNullValueToDB(value: CharArray): Any {
         return (value as CharArray).concatToString()
     }
 
-    override fun nonNullValueToString(value: Any): String {
+    override fun nonNullValueToString(value: CharArray): String {
         return "'${(value as CharArray).concatToString()}'"
     }
 

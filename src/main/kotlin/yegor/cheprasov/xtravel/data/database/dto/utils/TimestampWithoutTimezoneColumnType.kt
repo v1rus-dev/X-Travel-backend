@@ -1,19 +1,16 @@
 package yegor.cheprasov.xtravel.data.database.dto.utils
 
-import org.jetbrains.exposed.sql.Column
-import org.jetbrains.exposed.sql.ColumnType
-import org.jetbrains.exposed.sql.IDateColumnType
-import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.statements.api.PreparedStatementApi
 import java.sql.ResultSet
 import java.sql.Timestamp
 import java.time.Instant
 import java.time.LocalDateTime
 
-open class TimestampWithoutTimezoneColumnType : ColumnType(), IDateColumnType {
+open class TimestampWithoutTimezoneColumnType : ColumnType<LocalDateTime>(), IDateColumnType {
     override fun sqlType(): String = "TIMESTAMP WITHOUT TIME ZONE"
 
-    override fun valueFromDB(value: Any): Any = when (value) {
+    override fun valueFromDB(value: Any): LocalDateTime = when (value) {
         is LocalDateTime -> value
         is Timestamp -> value.toLocalDateTime()
         else -> error("Unexpected value: $value of ${value::class.qualifiedName}")
@@ -31,12 +28,12 @@ open class TimestampWithoutTimezoneColumnType : ColumnType(), IDateColumnType {
         return rs.getObject(index, LocalDateTime::class.java)
     }
 
-    override fun notNullValueToDB(value: Any): Any = Timestamp.valueOf(value as LocalDateTime)
+    override fun notNullValueToDB(value: LocalDateTime): Any = Timestamp.valueOf(value as LocalDateTime)
 
     override val hasTimePart: Boolean = true
 }
 
-fun Table.timestampWithoutTimeZone(name: String): Column<Instant> = registerColumn<Instant>(
-    name = name,
-    type = TimestampWithoutTimezoneColumnType()
-)
+//fun Table.timestampWithoutTimeZone(name: String): Column<Instant> = registerColumn<Instant>(
+//    name = name,
+//    type = TimestampWithoutTimezoneColumnType()
+//)

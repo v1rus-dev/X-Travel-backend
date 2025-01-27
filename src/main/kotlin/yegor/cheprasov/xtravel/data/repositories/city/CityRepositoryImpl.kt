@@ -1,9 +1,13 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
+import kotlinx.coroutines.Deferred
 import org.jetbrains.exposed.sql.*
-import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCityDTO
+import yegor.cheprasov.xtravel.data.database.tables.CityLocalizationTable
 import yegor.cheprasov.xtravel.data.database.tables.CityTable
 import yegor.cheprasov.xtravel.data.database.tables.CountryTable
 
@@ -22,13 +26,26 @@ class CityRepositoryImpl(
     }
 
     override suspend fun getById(id: Long): CityDTO? {
-       return try {
-           val city = databaseProvider.dbQuery { CountryTable.select { CountryTable.id.eq(id) }.single() }
-           city.mapToCityDTO()
-       } catch (e: Exception) {
-           e.printStackTrace()
-           null
-       }
+        return try {
+            val city = databaseProvider.dbQuery { CountryTable.selectAll().where(CountryTable.id.eq(id)) }.single()
+            city.mapToCityDTO()
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    override suspend fun fetchCitiesShort(lang: String): Deferred<List<ShortCityDTO>> = suspendedTransactionAsync {
+        return@suspendedTransactionAsync try {
+            (CityTable innerJoin CityLocalizationTable)
+                .selectAll()
+                .where(CityLocalizationTable.languageCode.eq(lang))
+                .map { it.mapToShortCityDTO() }
+
+        } catch (e: Exception) {
+            e.printStackTrace();
+            emptyList()
+        }
     }
 
     private suspend fun Query.toCityDTOList(): List<CityDTO> =
@@ -40,16 +57,17 @@ class CityRepositoryImpl(
 
     private fun ResultRow.mapToCityDTO(): CityDTO =
         CityDTO(
-            id = this[CityTable.id].value,
-            nameEn = this[CityTable.nameEn],
-            nameRu = this[CityTable.nameRu],
-            descriptionEn = this[CityTable.descriptionEn],
-            descriptionRu = this[CityTable.descriptionRu],
-            population = this[CityTable.population],
-            latitude = this[CityTable.latitude],
-            longitude = this[CityTable.longitude],
-            countryId = this[CityTable.countryId].value,
+            cityId = this[CityTable.id].value,
+            countryId = this[CountryTable.id].value,
+            internalName = this[CityTable.internalName],
             folderName = this[CityTable.folderName],
+        )
+
+    private fun ResultRow.mapToShortCityDTO(): ShortCityDTO =
+        ShortCityDTO(
+            cityId = this[CityTable.id].value,
+            cityName = this[CityLocalizationTable.name],
+            folderName = this[CityTable.folderName]
         )
 
 }

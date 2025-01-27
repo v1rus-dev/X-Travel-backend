@@ -2,10 +2,13 @@ package yegor.cheprasov.xtravel.data.repositories.user
 
 import kotlinx.coroutines.Deferred
 import kotlinx.datetime.Instant
+import org.h2.engine.User
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
+import org.jetbrains.exposed.sql.selectAll
 import org.jetbrains.exposed.sql.transactions.experimental.newSuspendedTransaction
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
@@ -33,8 +36,8 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
     override suspend fun fetchUser(email: String): Deferred<UserDTO?> =
         suspendedTransactionAsync(db = databaseProvider.providedDatabase) {
             try {
-//            val user = UsersTable.select { UsersTable.login eq login }.singleOrNull()
-                val user = databaseProvider.dbQuery { UsersTable.select { UsersTable.email eq email }.singleOrNull() }
+                val user =
+                    databaseProvider.dbQuery { UsersTable.selectAll().where(UsersTable.email.eq(email)) }.singleOrNull()
                 return@suspendedTransactionAsync user?.mapToUserDTO()
             } catch (e: Exception) {
                 e.printStackTrace()
@@ -46,12 +49,8 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
         suspendedTransactionAsync(db = databaseProvider.providedDatabase) {
             try {
                 val user = databaseProvider.dbQuery {
-                    UsersTable.select {
-                        UsersTable.id eq EntityID<UUID>(
-                            id = UUID.fromString(id),
-                            table = UsersTable
-                        )
-                    }
+                    UsersTable.selectAll()
+                        .where(UsersTable.id.eq(EntityID(id = UUID.fromString(id), table = UsersTable)))
                 }.singleOrNull()
                 return@suspendedTransactionAsync user?.mapToUserDTO()
             } catch (e: Exception) {

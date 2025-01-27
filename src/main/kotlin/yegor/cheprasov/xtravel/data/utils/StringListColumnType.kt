@@ -4,7 +4,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.ColumnType
 import org.jetbrains.exposed.sql.Table
 
-class StringListColumnType(private val delimiter: String = ",") : ColumnType() {
+class StringListColumnType(private val delimiter: String = ",") : ColumnType<List<String>>() {
     override fun sqlType(): String = "TEXT"
 
     override fun valueFromDB(value: Any): List<String> {
@@ -15,12 +15,12 @@ class StringListColumnType(private val delimiter: String = ",") : ColumnType() {
         }
     }
 
-    override fun notNullValueToDB(value: Any): Any {
-        return (value as List<String>).joinToString(delimiter)
+    override fun notNullValueToDB(value: List<String>): Any {
+        return value.joinToString(delimiter)
     }
 
-    override fun nonNullValueToString(value: Any): String {
-        return "'${(value as List<String>).joinToString(delimiter)}'"
+    override fun nonNullValueToString(value: List<String>): String {
+        return "'${value.joinToString(delimiter)}'"
     }
 }
 

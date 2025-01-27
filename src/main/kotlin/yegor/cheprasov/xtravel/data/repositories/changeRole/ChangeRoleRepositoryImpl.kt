@@ -2,8 +2,10 @@ package yegor.cheprasov.xtravel.data.repositories.changeRole
 
 import kotlinx.coroutines.Deferred
 import kotlinx.datetime.Instant
+import org.h2.engine.User
 import org.jetbrains.exposed.dao.id.EntityID
 import org.jetbrains.exposed.sql.ResultRow
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.insert
 import org.jetbrains.exposed.sql.select
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
@@ -44,12 +46,15 @@ class ChangeRoleRepositoryImpl(
         suspendedTransactionAsync(db = databaseProvider.providedDatabase) {
             try {
                 val user = databaseProvider.dbQuery {
-                    UpdateRoleRequestsTable.select {
-                        UpdateRoleRequestsTable.userId eq EntityID<UUID>(
-                            id = UUID.fromString(userId),
-                            table = UsersTable
+                    UpdateRoleRequestsTable.select(UpdateRoleRequestsTable.userId)
+                        .where(
+                            UpdateRoleRequestsTable.userId.eq(
+                                EntityID(
+                                    id = UUID.fromString(userId),
+                                    table = UsersTable
+                                )
+                            )
                         )
-                    }
                 }.singleOrNull()
                 return@suspendedTransactionAsync user?.toUpdateRoleRequestSimpleDTO()
             } catch (e: Exception) {

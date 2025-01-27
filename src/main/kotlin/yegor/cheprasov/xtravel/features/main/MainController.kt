@@ -26,6 +26,7 @@ class MainController : KoinComponent {
 
     suspend fun fetchCities(call: ApplicationCall) {
         val lang = call.request.headers["lang"] ?: "ru"
+        val cities = cityRepository
     }
 
     suspend fun fetchAttractions(call: ApplicationCall) {

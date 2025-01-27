@@ -1,8 +1,7 @@
 package yegor.cheprasov.xtravel.data.database.dto.cities
 
-data class CityDTO(
+data class ShortCityDTO(
     val cityId: Long,
-    val countryId: Long,
-    val internalName: String,
+    val cityName: String,
     val folderName: String,
 )
