@@ -7,7 +7,8 @@ import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 object CityLocalizationTable : IdTable<Long>("city_localization") {
     override val id: Column<EntityID<Long>> = long("id").autoIncrement().entityId()
-    val cityId = reference("city_id", CountryTable)
+
+    val cityId = reference("city_id", CityTable)
     val languageCode = varchar("language_code", 10)
     val name = varchar("name", 60)
     val description = text("description")

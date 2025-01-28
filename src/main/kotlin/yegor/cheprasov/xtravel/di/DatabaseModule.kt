@@ -3,6 +3,8 @@ package yegor.cheprasov.xtravel.di
 import org.koin.core.module.Module
 import org.koin.dsl.module
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
+import yegor.cheprasov.xtravel.data.repositories.attraction.AttractionRepository
+import yegor.cheprasov.xtravel.data.repositories.attraction.AttractionRepositoryImpl
 import yegor.cheprasov.xtravel.data.repositories.changeRole.ChangeRoleRepository
 import yegor.cheprasov.xtravel.data.repositories.changeRole.ChangeRoleRepositoryImpl
 import yegor.cheprasov.xtravel.data.repositories.city.CityRepository
@@ -39,5 +41,9 @@ fun databaseModule(): Module = module {
 
     single<ChangeRoleRepository> {
         ChangeRoleRepositoryImpl(get())
+    }
+
+    single<AttractionRepository> {
+        AttractionRepositoryImpl(get())
     }
 }

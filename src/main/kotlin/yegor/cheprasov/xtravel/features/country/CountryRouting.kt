@@ -10,7 +10,7 @@ fun Application.configureCountryRouting() {
             controller.getCountries(call)
         }
 
-        get("/country/{country_id/info") {
+        get("/country/{country_id}/info") {
             controller.getCountryInfo(call)
         }
 

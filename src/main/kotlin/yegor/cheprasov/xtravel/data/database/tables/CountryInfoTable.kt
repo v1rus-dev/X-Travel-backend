@@ -12,4 +12,5 @@ object CountryInfoTable : IdTable<Long>(name = "country_info") {
     val phoneCode = integer("phone_code")
     val literacyRate = double("literacy_rate").nullable()
     val isoCode = varchar("iso_code", 3)
+    val currency = reference("currency", CurrencyTable.currencyCode)
 }

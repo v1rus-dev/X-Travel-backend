@@ -12,4 +12,6 @@ interface CityRepository {
 
     suspend fun fetchCitiesShort(lang: String): Deferred<List<ShortCityDTO>>
 
+    suspend fun fetchShortCitiesByCountryId(countryId: Long, lang: String): Deferred<List<ShortCityDTO>>
+
 }

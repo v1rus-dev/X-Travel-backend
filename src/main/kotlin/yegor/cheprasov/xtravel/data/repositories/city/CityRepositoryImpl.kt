@@ -9,6 +9,7 @@ import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
 import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCityDTO
 import yegor.cheprasov.xtravel.data.database.tables.CityLocalizationTable
 import yegor.cheprasov.xtravel.data.database.tables.CityTable
+import yegor.cheprasov.xtravel.data.database.tables.CountryLocalizationTable
 import yegor.cheprasov.xtravel.data.database.tables.CountryTable
 
 class CityRepositoryImpl(
@@ -37,9 +38,9 @@ class CityRepositoryImpl(
 
     override suspend fun fetchCitiesShort(lang: String): Deferred<List<ShortCityDTO>> = suspendedTransactionAsync {
         return@suspendedTransactionAsync try {
-            (CityTable innerJoin CityLocalizationTable)
+            (CityTable innerJoin CityLocalizationTable innerJoin CountryTable innerJoin CountryLocalizationTable)
                 .selectAll()
-                .where(CityLocalizationTable.languageCode.eq(lang))
+                .where(CityLocalizationTable.languageCode.eq(lang).and(CountryLocalizationTable.languageCode.eq(lang)))
                 .map { it.mapToShortCityDTO() }
 
         } catch (e: Exception) {
@@ -47,6 +48,22 @@ class CityRepositoryImpl(
             emptyList()
         }
     }
+
+    override suspend fun fetchShortCitiesByCountryId(countryId: Long, lang: String): Deferred<List<ShortCityDTO>> =
+        suspendedTransactionAsync {
+            return@suspendedTransactionAsync try {
+                (CityTable innerJoin CityLocalizationTable innerJoin CountryTable innerJoin CountryLocalizationTable)
+                    .selectAll()
+                    .where(
+                        CityTable.countryId.eq(countryId).and(CityLocalizationTable.languageCode.eq(lang))
+                            .and(CountryLocalizationTable.languageCode.eq(lang))
+                    )
+                    .map { it.mapToShortCityDTO() }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList()
+            }
+        }
 
     private suspend fun Query.toCityDTOList(): List<CityDTO> =
         databaseProvider.dbQuery {
@@ -66,8 +83,12 @@ class CityRepositoryImpl(
     private fun ResultRow.mapToShortCityDTO(): ShortCityDTO =
         ShortCityDTO(
             cityId = this[CityTable.id].value,
+            countryId = this[CountryTable.id].value,
             cityName = this[CityLocalizationTable.name],
-            folderName = this[CityTable.folderName]
+            countryName = this[CountryLocalizationTable.name],
+            cityFolderName = this[CityTable.folderName],
+            parentCountryId = this[CountryTable.id].value,
+            parentCountryFolderName = this[CountryTable.folderName],
         )
 
 }

@@ -2,9 +2,12 @@ package yegor.cheprasov.xtravel.data.repositories.country
 
 import kotlinx.coroutines.Deferred
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryDTO
+import yegor.cheprasov.xtravel.data.database.dto.country.CountryInfoDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 
 interface CountryRepository {
+
+    suspend fun fetchCountryInfo(countryId: Long, lang: String): Deferred<CountryInfoDTO?>
 
     suspend fun fetchByCountryId(countryId: Long, lang: String): Deferred<CountryDTO?>
 

@@ -18,12 +18,6 @@ fun Application.configureCityRouting() {
     }
 
     routing {
-        get("/city/main") {
-            controller.fetchCitiesForMain(call)
-        }
-    }
-
-    routing {
         get("/city/{city_id}/attractions") {
 
         }
