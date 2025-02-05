@@ -1,8 +1,10 @@
 package yegor.cheprasov.xtravel.features.country.mapper
 
+import yegor.cheprasov.xtravel.data.database.dto.attractions.ShortAttractionDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.CountryInfoDTO
 import yegor.cheprasov.xtravel.data.database.dto.country.ShortCountryDTO
 import yegor.cheprasov.xtravel.features.country.CountryInfoResponseRemote
+import yegor.cheprasov.xtravel.features.country.ShortAttraction
 import yegor.cheprasov.xtravel.features.country.ShortCountry
 import yegor.cheprasov.xtravel.utils.FileService
 
@@ -50,6 +52,23 @@ object CountryMapper {
                 ""
             },
             images = sortedImages
+        )
+    }
+
+    fun mapToShortAttraction(dto: ShortAttractionDTO, fileService: FileService, currentAddress: String): ShortAttraction {
+        val listAllFiles = fileService.listAllFiles("countries/${dto.countryFolderName}/attractions/${dto.folderName}")
+        val mainImage = listAllFiles.firstOrNull { it.contains("main") } ?: listAllFiles.firstOrNull()
+
+        return ShortAttraction(
+            attractionId = dto.attractionId,
+            name = dto.name,
+            imageUrl = if (mainImage != null) {
+                "$currentAddress/resources/$mainImage"
+            } else {
+                ""
+            },
+            cityId = dto.cityId,
+            cityName = dto.cityName,
         )
     }
 

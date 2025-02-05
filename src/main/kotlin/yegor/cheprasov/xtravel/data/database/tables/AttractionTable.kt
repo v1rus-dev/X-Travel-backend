@@ -6,7 +6,7 @@ import org.jetbrains.exposed.sql.Column
 import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 
 object AttractionTable : IdTable<Long>(name = "attractions") {
-    override val id: Column<EntityID<Long>> = long("id").entityId().autoIncrement()
+    override val id: Column<EntityID<Long>> = long("id").autoIncrement().entityId()
 
     val createdAt = timestamp("created_at")
     val updatedAt = timestamp("updated_at")

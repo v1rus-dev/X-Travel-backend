@@ -44,5 +44,14 @@ data class CountryCitiesResponseRemote(
 
 @Serializable
 data class CountryAttractionsResponseRemote(
-    val list: List<String>
+    val list: List<ShortAttraction>
+)
+
+@Serializable
+data class ShortAttraction(
+    val attractionId: Long,
+    val name: String,
+    val imageUrl: String,
+    val cityId: Long?,
+    val cityName: String?
 )

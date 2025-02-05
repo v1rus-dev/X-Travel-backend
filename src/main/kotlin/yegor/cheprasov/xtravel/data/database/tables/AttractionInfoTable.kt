@@ -8,6 +8,7 @@ import org.jetbrains.exposed.sql.kotlin.datetime.timestamp
 object AttractionInfoTable : IdTable<Long>(name = "attraction_info") {
     override val id: Column<EntityID<Long>> = long("id").autoIncrement().entityId()
 
+    val attractionId = reference("attraction_id", AttractionTable)
     val latitude = double("latitude")
     val longitude = double("longitude")
     val rating = float("rating").nullable()

@@ -35,7 +35,8 @@ class CountryController : KoinComponent {
     suspend fun getCountryInfo(call: ApplicationCall) {
         val lang = call.getLang()
         val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
-        val countryInfo = countryRepository.fetchCountryInfo(countryId, lang).await() ?: return call.respond(HttpStatusCode.NotFound)
+        val countryInfo =
+            countryRepository.fetchCountryInfo(countryId, lang).await() ?: return call.respond(HttpStatusCode.NotFound)
 
         val mappedInfo = CountryMapper.mapToCountryInfo(countryInfo, fileService, call.getWebAddress())
 
@@ -57,7 +58,16 @@ class CountryController : KoinComponent {
         val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
         val attractions = attractionRepository.fetchAttractionsByCountryId(countryId, lang).await()
 
-        call.respond(HttpStatusCode.OK, CountryAttractionsResponseRemote(list = attractions))
+        val mappedAttractions = attractions.map { attraction ->
+            CountryMapper.mapToShortAttraction(
+                attraction,
+                fileService,
+                call.getWebAddress()
+            )
+        }
+
+        println("Attractions: $attractions")
+        call.respond(HttpStatusCode.OK, CountryAttractionsResponseRemote(list = mappedAttractions))
     }
 
 }
