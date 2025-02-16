@@ -10,4 +10,5 @@ object CityTable : IdTable<Long>(name = "cities") {
     val countryId = reference("country_id", CountryTable)
     val folderName = varchar("folder_name", 30)
     val internalName = varchar("internal_name", 30)
+    val isCapital = bool("is_capital")
 }

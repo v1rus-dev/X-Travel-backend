@@ -1,14 +1,14 @@
 package yegor.cheprasov.xtravel.data.repositories.attraction
 
 import kotlinx.coroutines.Deferred
-import org.jetbrains.exposed.sql.ResultRow
-import org.jetbrains.exposed.sql.and
-import org.jetbrains.exposed.sql.leftJoin
-import org.jetbrains.exposed.sql.selectAll
+import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.plus
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.attractions.ShortAttractionDTO
 import yegor.cheprasov.xtravel.data.database.tables.*
+import yegor.cheprasov.xtravel.plugins.City
 
 class AttractionRepositoryImpl(
     private val databaseProvider: DatabaseProvider
@@ -19,12 +19,49 @@ class AttractionRepositoryImpl(
     ): Deferred<List<ShortAttractionDTO>> =
         suspendedTransactionAsync {
             return@suspendedTransactionAsync try {
-                (AttractionTable innerJoin AttractionInfoTable innerJoin AttractionLocalizationTable innerJoin CountryTable leftJoin CityTable)
+                (AttractionTable
+                        innerJoin AttractionInfoTable
+                        innerJoin AttractionLocalizationTable
+                        leftJoin CountryTable
+                        leftJoin CityTable
+                        innerJoin CityLocalizationTable
+                        )
                     .selectAll()
                     .where {
-                        AttractionTable.countryId eq countryId and AttractionLocalizationTable.languageCode.eq(lang) and CountryTable.id.eq(
-                            countryId
+                        (AttractionTable.countryId eq countryId) and
+                                (AttractionLocalizationTable.languageCode eq lang) and
+                                (CityLocalizationTable.languageCode eq lang) and
+                                (CountryTable.id eq AttractionTable.countryId) and  // Вместо ON
+                                (CityTable.id eq AttractionTable.cityId) and        // Вместо ON
+                                (CityLocalizationTable.cityId eq CityTable.id)      // Вместо ON
+                    }
+                    .map {
+                        it.mapToShortAttractionDTO()
+                    }
+            } catch (e: Exception) {
+                e.printStackTrace()
+                emptyList<ShortAttractionDTO>()
+            }
+        }
+
+    override suspend fun fetchAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>> =
+        suspendedTransactionAsync {
+            return@suspendedTransactionAsync try {
+                (AttractionTable
+                        innerJoin AttractionInfoTable
+                        innerJoin AttractionLocalizationTable
+                        leftJoin CountryTable
+                        leftJoin CityTable
+                        innerJoin CityLocalizationTable
                         )
+                    .selectAll()
+                    .where {
+                        (AttractionTable.cityId eq cityId) and
+                                (AttractionLocalizationTable.languageCode eq lang) and
+                                (CityLocalizationTable.languageCode eq lang) and
+                                (CountryTable.id eq AttractionTable.countryId) and  // Вместо ON
+                                (CityTable.id eq AttractionTable.cityId) and        // Вместо ON
+                                (CityLocalizationTable.cityId eq CityTable.id)      // Вместо ON
                     }
                     .map {
                         it.mapToShortAttractionDTO()

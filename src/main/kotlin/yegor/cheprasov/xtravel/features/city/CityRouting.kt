@@ -19,7 +19,7 @@ fun Application.configureCityRouting() {
 
     routing {
         get("/city/{city_id}/attractions") {
-
+            controller.fetchAttractions(call)
         }
     }
 

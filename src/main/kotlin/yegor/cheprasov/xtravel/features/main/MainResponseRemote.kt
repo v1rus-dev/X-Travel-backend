@@ -29,6 +29,14 @@ data class ShortCity(
 )
 
 @Serializable
+data class ShortCityCapital(
+    val cityId: Long,
+    val countryId: Long,
+    val cityName: String,
+    val imageUrl: String
+)
+
+@Serializable
 data class ShortAttraction(
     val attractionId: Int,
     val name: String,

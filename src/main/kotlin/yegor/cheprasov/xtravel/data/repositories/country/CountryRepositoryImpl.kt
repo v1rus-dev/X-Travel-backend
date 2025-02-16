@@ -90,17 +90,20 @@ class CountryRepositoryImpl(
             shortName = this[CountryLocalizationTable.shortName],
         )
 
-    private fun ResultRow.mapToCountryInfoDTO(): CountryInfoDTO = CountryInfoDTO(
-        countryId = this[CountryTable.id].value,
-        name = this[CountryLocalizationTable.name],
-        description = this[CountryLocalizationTable.description],
-        shortName = this[CountryLocalizationTable.shortName] ?: "",
-        folderName = this[CountryTable.folderName],
-        phoneCode = this[CountryInfoTable.phoneCode],
-        isoCode = this[CountryInfoTable.isoCode],
-        areaKm2 = this[CountryInfoTable.areaKm2],
-        currencyCode = this[CurrencyTable.currencyCode],
-        currencyFontCode = this[CurrencyTable.fontCode]
-    )
+    private fun ResultRow.mapToCountryInfoDTO(): CountryInfoDTO {
+        println("Map to country info dto: $this")
+        return CountryInfoDTO(
+            countryId = this[CountryTable.id].value,
+            name = this[CountryLocalizationTable.name],
+            description = this[CountryLocalizationTable.description],
+            shortName = this[CountryLocalizationTable.shortName] ?: "",
+            folderName = this[CountryTable.folderName],
+            phoneCode = this[CountryInfoTable.phoneCode],
+            isoCode = this[CountryInfoTable.isoCode],
+            areaKm2 = this[CountryInfoTable.areaKm2],
+            currencyCode = this[CurrencyTable.currencyCode],
+            currencyFontCode = this[CurrencyTable.fontCode]
+        )
+    }
 
 }

@@ -34,11 +34,17 @@ class CountryController : KoinComponent {
 
     suspend fun getCountryInfo(call: ApplicationCall) {
         val lang = call.getLang()
-        val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
+        val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(
+            HttpStatusCode.BadRequest,
+            message = "Country id cannot be cast to long"
+        )
         val countryInfo =
             countryRepository.fetchCountryInfo(countryId, lang).await() ?: return call.respond(HttpStatusCode.NotFound)
 
-        val mappedInfo = CountryMapper.mapToCountryInfo(countryInfo, fileService, call.getWebAddress())
+        val mappedInfo: CountryInfoResponseRemote =
+            CountryMapper.mapToCountryInfo(countryInfo, fileService, call.getWebAddress())
+
+        println("Country info: $mappedInfo")
 
         call.respond(HttpStatusCode.OK, mappedInfo)
     }
@@ -47,16 +53,19 @@ class CountryController : KoinComponent {
         val lang = call.getLang()
         val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
         val cities = cityRepository.fetchShortCitiesByCountryId(countryId, lang).await()
+        val capital = cityRepository.fetchCapitalByCountryId(countryId, lang).await()
 
         val mappedCities = cities.map { CityMapper.mapToShort(it, fileService, call.getWebAddress()) }
+        val mappedCapital = capital?.let { CityMapper.mapToShort(it, fileService, call.getWebAddress()) }
 
-        call.respond(HttpStatusCode.OK, CountryCitiesResponseRemote(list = mappedCities))
+        call.respond(HttpStatusCode.OK, CountryCitiesResponseRemote(capital = mappedCapital, list = mappedCities))
     }
 
     suspend fun getAttractionsForCountry(call: ApplicationCall) {
         val lang = call.getLang()
         val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
         val attractions = attractionRepository.fetchAttractionsByCountryId(countryId, lang).await()
+        println("Attractions size list: ${attractions.size}")
 
         val mappedAttractions = attractions.map { attraction ->
             CountryMapper.mapToShortAttraction(

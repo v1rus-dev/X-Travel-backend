@@ -7,4 +7,6 @@ interface AttractionRepository {
 
     suspend fun fetchAttractionsByCountryId(countryId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
 
+    suspend fun fetchAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
+
 }

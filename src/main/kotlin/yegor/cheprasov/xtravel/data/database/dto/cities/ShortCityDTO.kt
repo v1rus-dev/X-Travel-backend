@@ -7,5 +7,14 @@ data class ShortCityDTO(
     val countryName: String,
     val cityFolderName: String,
     val parentCountryId: Long,
-    val parentCountryFolderName: String
+    val parentCountryFolderName: String,
+    val isCapital: Boolean
+)
+
+data class ShortCapitalCityDTO(
+    val cityId: Long,
+    val countryId: Long,
+    val cityName: String,
+    val cityFolderName: String,
+    val parentCountryFolderName: String,
 )

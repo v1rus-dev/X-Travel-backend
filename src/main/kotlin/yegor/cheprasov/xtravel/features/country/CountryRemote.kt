@@ -2,6 +2,7 @@ package yegor.cheprasov.xtravel.features.country
 
 import kotlinx.serialization.Serializable
 import yegor.cheprasov.xtravel.features.main.ShortCity
+import yegor.cheprasov.xtravel.features.main.ShortCityCapital
 
 @Serializable
 data class CountryInfoRequestRemote(
@@ -39,6 +40,7 @@ data class CountryInfoResponseRemote(
 
 @Serializable
 data class CountryCitiesResponseRemote(
+    val capital: ShortCityCapital?,
     val list: List<ShortCity>
 )
 

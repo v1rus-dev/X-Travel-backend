@@ -1,16 +1,15 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
+import kotlinx.coroutines.CompletableDeferred
 import kotlinx.coroutines.Deferred
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 import org.jetbrains.exposed.sql.transactions.experimental.suspendedTransactionAsync
 import yegor.cheprasov.xtravel.data.database.DatabaseProvider
 import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCapitalCityDTO
 import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCityDTO
-import yegor.cheprasov.xtravel.data.database.tables.CityLocalizationTable
-import yegor.cheprasov.xtravel.data.database.tables.CityTable
-import yegor.cheprasov.xtravel.data.database.tables.CountryLocalizationTable
-import yegor.cheprasov.xtravel.data.database.tables.CountryTable
+import yegor.cheprasov.xtravel.data.database.tables.*
 
 class CityRepositoryImpl(
     private val databaseProvider: DatabaseProvider
@@ -48,6 +47,20 @@ class CityRepositoryImpl(
             emptyList()
         }
     }
+
+    override suspend fun fetchCapitalByCountryId(countryId: Long, lang: String): Deferred<ShortCapitalCityDTO?> = suspendedTransactionAsync {
+        return@suspendedTransactionAsync try {
+            (CityTable innerJoin CityLocalizationTable innerJoin CountryTable)
+                .select(CityTable.id, CityTable.isCapital, CityTable.countryId, CityTable.folderName, CityLocalizationTable.name, CountryTable.folderName)
+                .where(CityTable.countryId.eq(countryId).and(CityLocalizationTable.languageCode.eq(lang)).and(CityTable.isCapital).and(CountryTable.id.eq(countryId)))
+                .singleOrNull()?.mapToShortCapitalDTO(countryId)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            null
+        }
+    }
+
+    override suspend fun fetchCityInfo(cityId: Long, lang: String): Deferred<CityDTO?> = CompletableDeferred(null)
 
     override suspend fun fetchShortCitiesByCountryId(countryId: Long, lang: String): Deferred<List<ShortCityDTO>> =
         suspendedTransactionAsync {
@@ -89,6 +102,15 @@ class CityRepositoryImpl(
             cityFolderName = this[CityTable.folderName],
             parentCountryId = this[CountryTable.id].value,
             parentCountryFolderName = this[CountryTable.folderName],
+            isCapital = this[CityTable.isCapital],
         )
+
+    private fun ResultRow.mapToShortCapitalDTO(countryId: Long): ShortCapitalCityDTO = ShortCapitalCityDTO(
+        cityId = this[CityTable.id].value,
+        countryId = countryId,
+        cityName = this[CityLocalizationTable.name],
+        cityFolderName = this[CityTable.folderName],
+        parentCountryFolderName = this[CountryTable.folderName],
+    )
 
 }

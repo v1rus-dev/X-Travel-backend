@@ -51,7 +51,7 @@ object CountryMapper {
             } else {
                 ""
             },
-            images = sortedImages
+            images = sortedImages.map { "$currentAddress/resources/$it" }
         )
     }
 
