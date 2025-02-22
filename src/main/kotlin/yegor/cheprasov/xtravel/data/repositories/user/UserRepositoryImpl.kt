@@ -19,7 +19,7 @@ import java.util.UUID
 
 class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserRepository {
     override suspend fun insert(userDTO: UserDTO): Unit =
-        newSuspendedTransaction(db = databaseProvider.providedDatabase) {
+        newSuspendedTransaction {
             databaseProvider.dbQuery {
                 UsersTable.insert {
                     it[id] = UUID.randomUUID()
@@ -34,11 +34,12 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
         }
 
     override suspend fun fetchUser(email: String): Deferred<UserDTO?> =
-        suspendedTransactionAsync(db = databaseProvider.providedDatabase) {
-            try {
-                val user =
-                    databaseProvider.dbQuery { UsersTable.selectAll().where(UsersTable.email.eq(email)) }.singleOrNull()
-                return@suspendedTransactionAsync user?.mapToUserDTO()
+        suspendedTransactionAsync {
+            return@suspendedTransactionAsync try {
+                (UsersTable)
+                    .selectAll()
+                    .where { UsersTable.email.eq(email) }
+                    .singleOrNull()?.mapToUserDTO()
             } catch (e: Exception) {
                 e.printStackTrace()
                 return@suspendedTransactionAsync null
@@ -46,7 +47,7 @@ class UserRepositoryImpl(private val databaseProvider: DatabaseProvider) : UserR
         }
 
     override suspend fun fetchUserById(id: String): Deferred<UserDTO?> =
-        suspendedTransactionAsync(db = databaseProvider.providedDatabase) {
+        suspendedTransactionAsync {
             try {
                 val user = databaseProvider.dbQuery {
                     UsersTable.selectAll()

@@ -6,12 +6,6 @@ import io.ktor.server.routing.*
 fun Application.configureCityRouting() {
     val controller = CityController()
     routing {
-        get("/city/all") {
-            controller.fetchAllCities(call)
-        }
-    }
-
-    routing {
         get("/city/{city_id}/info") {
             controller.fetchCityInfo(call)
         }

@@ -1,11 +1,11 @@
 package yegor.cheprasov.xtravel.data.repositories.city
 
 import kotlinx.coroutines.Deferred
-import yegor.cheprasov.xtravel.data.database.dto.cities.CityDTO
-import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCapitalCityDTO
-import yegor.cheprasov.xtravel.data.database.dto.cities.ShortCityDTO
+import yegor.cheprasov.xtravel.data.database.dto.cities.*
 
 interface CityRepository {
+
+    suspend fun getCityFullInfo(cityId: Long): Deferred<FullCityDTO?>
 
     suspend fun getAll(): List<CityDTO>
 
@@ -17,6 +17,6 @@ interface CityRepository {
 
     suspend fun fetchShortCitiesByCountryId(countryId: Long, lang: String): Deferred<List<ShortCityDTO>>
 
-    suspend fun fetchCityInfo(cityId: Long, lang: String): Deferred<CityDTO?>
+    suspend fun fetchCityInfo(cityId: Long, lang: String): Deferred<CityInfoDTO?>
 
 }

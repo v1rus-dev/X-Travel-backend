@@ -5,8 +5,8 @@ import yegor.cheprasov.xtravel.data.database.dto.attractions.ShortAttractionDTO
 
 interface AttractionRepository {
 
-    suspend fun fetchAttractionsByCountryId(countryId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
+    suspend fun fetchShortAttractionsByCountryId(countryId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
 
-    suspend fun fetchAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
+    suspend fun fetchShortAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>>
 
 }

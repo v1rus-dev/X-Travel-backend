@@ -11,6 +11,9 @@ class FileService(private val baseDirectory: String) {
         }
     }
 
+    fun listAllFilesForCity(countryFolderName: String, cityFolderName: String): List<String> =
+        listAllFiles("countries/$countryFolderName/cities/$cityFolderName")
+
     /**
      * Получить список всех файлов в указанной директории (включая вложенные).
      */

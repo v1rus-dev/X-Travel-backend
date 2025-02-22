@@ -29,6 +29,8 @@ class AuthController : KoinComponent {
             return
         }
 
+        println("Login userDTO: $userDTO")
+
         val result = BCrypt.verifyer().verify(user.password.toCharArray(), userDTO.passwordHash)
 
         if (!result.verified) {
@@ -52,10 +54,13 @@ class AuthController : KoinComponent {
     suspend fun performRegister(call: ApplicationCall) {
         val registerReceiveRemote = call.receive(RegisterReceiveRemote::class)
         println(registerReceiveRemote.toString())
-        val userDTO: UserDTO? = userRepository.fetchUser(registerReceiveRemote.login).await()
+        println("Register login: ${registerReceiveRemote.email}")
+        val userDTO: UserDTO? = userRepository.fetchUser(registerReceiveRemote.email).await()
+
+        println("Register: $userDTO")
 
         if (userDTO != null) {
-            call.respond(HttpStatusCode.Conflict, "User already exists")
+            return call.respond(HttpStatusCode.Conflict, "User already exists")
         } else {
             val userId = UUID.randomUUID()
             val user = UserDTO(

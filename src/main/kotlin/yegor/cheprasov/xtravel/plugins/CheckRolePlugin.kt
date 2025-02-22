@@ -53,6 +53,9 @@ val RoleValidatingPlugin = createRouteScopedPlugin(
             val jwtPrincipal = call.principal<JWTPrincipal>()
             val role = jwtPrincipal?.payload?.getClaim("role")?.asString()
 
+            println("UserName: $userName")
+            println("Role: $role")
+
             if (role == null || role !in roles) {
                 call.respond(HttpStatusCode.Forbidden, "Access denied!")
             }

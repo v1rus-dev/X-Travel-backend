@@ -13,7 +13,7 @@ import yegor.cheprasov.xtravel.plugins.City
 class AttractionRepositoryImpl(
     private val databaseProvider: DatabaseProvider
 ) : AttractionRepository {
-    override suspend fun fetchAttractionsByCountryId(
+    override suspend fun fetchShortAttractionsByCountryId(
         countryId: Long,
         lang: String
     ): Deferred<List<ShortAttractionDTO>> =
@@ -44,11 +44,11 @@ class AttractionRepositoryImpl(
             }
         }
 
-    override suspend fun fetchAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>> =
+    override suspend fun fetchShortAttractionByCityId(cityId: Long, lang: String): Deferred<List<ShortAttractionDTO>> =
         suspendedTransactionAsync {
+            println("Fetch attraction by city Id: $cityId")
             return@suspendedTransactionAsync try {
                 (AttractionTable
-                        innerJoin AttractionInfoTable
                         innerJoin AttractionLocalizationTable
                         leftJoin CountryTable
                         leftJoin CityTable

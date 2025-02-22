@@ -1,6 +1,7 @@
 package yegor.cheprasov.xtravel
 
 import io.ktor.server.application.*
+import yegor.cheprasov.xtravel.features.admin.configureAdminRouting
 import yegor.cheprasov.xtravel.features.auth.configureAuthRouting
 import yegor.cheprasov.xtravel.features.changeRole.configureChangeRoleRouting
 import yegor.cheprasov.xtravel.features.city.configureCityRouting
@@ -23,7 +24,7 @@ fun Application.module() {
     configureRouting()
     configureFiles()
     configureUtilsRouting()
-
+    configureAdminRouting()
     configureMainRouting()
     configureAuthRouting()
 

@@ -10,6 +10,7 @@ import yegor.cheprasov.xtravel.data.repositories.city.CityRepository
 import yegor.cheprasov.xtravel.data.repositories.country.CountryRepository
 import yegor.cheprasov.xtravel.features.city.mapper.CityMapper
 import yegor.cheprasov.xtravel.features.country.mapper.CountryMapper
+import yegor.cheprasov.xtravel.features.mappers.AttractionMapper
 import yegor.cheprasov.xtravel.utils.FileService
 import yegor.cheprasov.xtravel.utils.getLang
 import yegor.cheprasov.xtravel.utils.getWebAddress
@@ -64,11 +65,11 @@ class CountryController : KoinComponent {
     suspend fun getAttractionsForCountry(call: ApplicationCall) {
         val lang = call.getLang()
         val countryId = call.parameters["country_id"]?.toLong() ?: return call.respond(HttpStatusCode.BadRequest)
-        val attractions = attractionRepository.fetchAttractionsByCountryId(countryId, lang).await()
+        val attractions = attractionRepository.fetchShortAttractionsByCountryId(countryId, lang).await()
         println("Attractions size list: ${attractions.size}")
 
         val mappedAttractions = attractions.map { attraction ->
-            CountryMapper.mapToShortAttraction(
+            AttractionMapper.mapToShortAttraction(
                 attraction,
                 fileService,
                 call.getWebAddress()
